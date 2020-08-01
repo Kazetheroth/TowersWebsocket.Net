@@ -1,0 +1,4 @@
+I:\ESGI\5ieme\ProjetAnnuel\TowersWebsocketSharp\TowersWebsocketNet31\TowersWebsocketNet31\obj\Debug\netcoreapp3.1\TowersWebsocketNet31.csprojAssemblyReference.cache
+I:\ESGI\5ieme\ProjetAnnuel\TowersWebsocketSharp\TowersWebsocketNet31\TowersWebsocketNet31\obj\Debug\netcoreapp3.1\TowersWebsocketNet31.AssemblyInfoInputs.cache
+I:\ESGI\5ieme\ProjetAnnuel\TowersWebsocketSharp\TowersWebsocketNet31\TowersWebsocketNet31\obj\Debug\netcoreapp3.1\TowersWebsocketNet31.AssemblyInfo.cs
+I:\ESGI\5ieme\ProjetAnnuel\TowersWebsocketSharp\TowersWebsocketNet31\TowersWebsocketNet31\obj\Debug\netcoreapp3.1\TowersWebsocketNet31.csproj.CoreCompileInputs.cache
