@@ -21,16 +21,20 @@ namespace TowersWebsocketNet31.Server
         protected override void OnMessage (MessageEventArgs e)
         {
             Console.WriteLine(e.Data);
-            Message newMessage = new Message();
-            if (JsonSerializer.Deserialize<Message>(e.Data) != null)
+            if (e.Data.Contains("GRID"))
             {
-                newMessage = JsonSerializer.Deserialize<Message>(e.Data);
+                
             }
-            
-
-            string id = players.Find(player => player.AuthToken.Equals(newMessage._SENDER))?.Id;
-            
-            Send ($"Message received : USER:{newMessage._SENDER}, DATA:{newMessage.rawData}, WSID: {id}");
+            else
+            {
+                Message newMessage = new Message();
+                if (JsonSerializer.Deserialize<Message>(e.Data) != null)
+                {
+                    newMessage = JsonSerializer.Deserialize<Message>(e.Data);
+                }
+                //string id = players.Find(player => player.AuthToken.Equals(newMessage._SENDER))?.Id;
+                //Send ($"Message received : USER:{newMessage._SENDER}, DATA:{newMessage._GRID}, WSID: {id}");
+            }
         }
     }
 }

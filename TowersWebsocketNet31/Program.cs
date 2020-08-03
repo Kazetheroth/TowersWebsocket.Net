@@ -10,9 +10,9 @@ namespace TowersWebsocketNet31
 {
     public class Program
     {
-        public static string ENDPOINT;
-        public static string PORT;
-        public static string ADDRESS;
+        private static string _endpoint;
+        private static string _port;
+        private static string _address;
         
         public static void Main(string[] args)
         {
@@ -29,28 +29,28 @@ namespace TowersWebsocketNet31
                 DotNetEnv.Env.Load("./towers.env");
             }
             
-            PORT = DotNetEnv.Env.GetString("PORT");
+            _port = DotNetEnv.Env.GetString("PORT");
             Console.WriteLine("ENV : " + DotNetEnv.Env.GetString("ENV"));
             switch (DotNetEnv.Env.GetString("ENV"))
             {
                 case "PROD":
                     Console.WriteLine("Is Prod");
-                    ENDPOINT = DotNetEnv.Env.GetString("ENDPOINT_PROD");
-                    ADDRESS = $"{ENDPOINT}:{PORT}";
+                    _endpoint = DotNetEnv.Env.GetString("ENDPOINT_PROD");
+                    _address = $"{_endpoint}:{_port}";
                     break;
                 case "DEV":
                     Console.WriteLine("Is Dev");
-                    ENDPOINT = DotNetEnv.Env.GetString("ENDPOINT_DEV");
-                    ADDRESS = $"{ENDPOINT}:{PORT}";
+                    _endpoint = DotNetEnv.Env.GetString("ENDPOINT_DEV");
+                    _address = $"{_endpoint}:{_port}";
                     break;
                 case "LOCAL":
                     Console.WriteLine("Is Local");
-                    ENDPOINT = DotNetEnv.Env.GetString("ENDPOINT_LOCAL");
-                    ADDRESS = ENDPOINT;
+                    _endpoint = DotNetEnv.Env.GetString("ENDPOINT_LOCAL");
+                    _address = _endpoint;
                     break;
             }
-            Console.WriteLine($"Address : {ADDRESS}");
-            WebSocketServer webSocketServer = new WebSocketServer(ADDRESS);
+            Console.WriteLine($"Address : {_address}");
+            WebSocketServer webSocketServer = new WebSocketServer(_address);
             webSocketServer.AddWebSocketService<TowersWebsocket>("/websocket");
             //Console.WriteLine(webSocketServer.WebSocketServices["websoket"].Type);
             

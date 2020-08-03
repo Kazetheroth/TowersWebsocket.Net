@@ -5,6 +5,6 @@ namespace TowersWebsocketNet31.Server
         public string _TARGET { get; set; }
         public string _ROOMID { get; set; }
         public string _SENDER { get; set; }
-        public string rawData { get; set; }
+        public string _GRID { get; set; }
     }
 }
