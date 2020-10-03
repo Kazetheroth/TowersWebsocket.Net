@@ -23,7 +23,8 @@ namespace TowersWebsocketNet31.Server.Player
             this.roomId = roomId;
             this.authToken = authToken;
         }
-
+        
+        
         public string Id
         {
             get => id;

@@ -2,20 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
+using TowersWebsocketNet31.Server;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace TowersWebsocketNet31.Server
+namespace TowersWebsocketNet31.Chat
 {
     
-    public class TowersWebsocket : WebSocketBehavior
+    public class ChatWebsocket : WebSocketBehavior
     {
-
+        public static List<Server.Player.Player> players = new List<Server.Player.Player>();
+        public static List<Server.Room.Room> rooms = new List<Server.Room.Room>();
+        
         protected override void OnOpen()
         {
             base.OnOpen();
-            Player.Player newPlayer = new Player.Player(ID);
-            Program.players.Add(newPlayer);
+            Server.Player.Player newPlayer = new Server.Player.Player(ID);
+            players.Add(newPlayer);
             Console.WriteLine($"New connection->{ID}");
         }
 
@@ -28,19 +31,15 @@ namespace TowersWebsocketNet31.Server
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
                 CallbackMessages callback = OnMessageArgs(ref newMessage);
-                foreach (Player.Player pl in Program.rooms[0].PlayerList)
-                {
-                    Console.WriteLine($"Player on GENERAL : {pl.Id}");
-                }
                 if (callback != null)
                 {
                     /*** ALL TARGET ***/
                     if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.All])
                     {
-                        List<Player.Player> playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        List<Server.Player.Player> playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Player.Player player in playerList)
+                            foreach (Server.Player.Player player in playerList)
                             {
                                 foreach (string returnCallbackMessage in callback.callbacks)
                                 {
@@ -53,10 +52,10 @@ namespace TowersWebsocketNet31.Server
                     /*** OTHERS TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int) TargetType.Others])
                     {
-                        var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Player.Player player in playerList)
+                            foreach (Server.Player.Player player in playerList)
                             {
                                 if (player.Id != ID)
                                 {
@@ -81,10 +80,10 @@ namespace TowersWebsocketNet31.Server
                     /*** ONLY_ONE TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.OnlyOne])
                     {
-                        var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Player.Player player in playerList)
+                            foreach (Server.Player.Player player in playerList)
                             {
                                 if (player.AuthToken == newMessage._ARGS[0].tokenTarget)
                                 {
@@ -105,19 +104,7 @@ namespace TowersWebsocketNet31.Server
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
-            Player.Player player = Program.players.Find(p => p.Id == ID);
-            Room.Room playerRoom = Program.rooms.Find(r => r.Name == player?.RoomId);
-            if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
-            {
-                foreach (Player.Player pl in playerRoom.PlayerList)
-                {
-                    if (ID != pl.Id)
-                    {
-                        Sessions.SendTo("{\"callbackMessages\":{\"message\":\"DEATH\"}}", pl.Id);
-                    }
-                }
-            }
-            Program.players.Remove(player);
+            
         }
 
         protected override void OnError(ErrorEventArgs e)
@@ -128,15 +115,14 @@ namespace TowersWebsocketNet31.Server
         CallbackMessages OnMessageArgs(ref Message newMessage)
         {
             CallbackMessages callback = new CallbackMessages(new List<string>());
-            Message message = newMessage;
             if (newMessage._METHOD != null)
             {
                 switch (newMessage._METHOD)
                 {
                     case "setIdentity":
-                        callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID));
+                        Console.WriteLine("ID : " + ID);
+                        callback.callbacks.Add(players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID));
                         callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"Identity Set\"}}");
-                        //Program.rooms.Find(x => x.Name == message._ROOMID)?.PlayerList.Add(Program.players.Find(x => x.Id == ID));
                         break;
                     default:
                         break;
