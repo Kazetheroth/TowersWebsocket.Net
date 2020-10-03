@@ -3,6 +3,22 @@ using System.Reflection;
 
 namespace TowersWebsocketNet31.Server
 {
+    public enum TargetType
+    {
+        All,
+        OnlyOne,
+        Self,
+        Others
+    }
+    public static class TargetMessage
+    {
+        public static readonly string[] Target = {
+            "ALL",
+            "ONLY_ONE",
+            "SELF",
+            "OTHERS"
+        };
+    }
     public class Utils
     {
         public static string InvokeStringMethod(string typeName, string methodName, string stringParam)

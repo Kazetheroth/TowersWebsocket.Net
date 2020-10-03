@@ -4,9 +4,11 @@ using System.Reflection;
 using System.Text.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using static TowersWebsocketNet31.Server.TargetMessage;
 
 namespace TowersWebsocketNet31.Server
 {
+    
     public class TowersWebsocket : WebSocketBehavior
     {
         public static List<Player.Player> players = new List<Player.Player>();
@@ -22,39 +24,56 @@ namespace TowersWebsocketNet31.Server
 
         protected override void OnMessage (MessageEventArgs e)
         {
-            string callback = OnMessageArgs(e);
-            
-            //string id = players.Find(player => player.AuthToken.Equals(newMessage._SENDER))?.Id;
-            //Send ($"Message received : USER:{newMessage._SENDER}, DATA:{newMessage._GRID}, WSID: {id}");
-
-        }
-
-        string OnMessageArgs(MessageEventArgs e)
-        {
-            string callback = "null";
+            string callback;
             
             Console.WriteLine(e.Data);
             Message newMessage;
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                
-                
-                if (newMessage._METHOD != null)
+                callback = OnMessageArgs(ref newMessage);
+                if (callback != null)
                 {
-                    switch (newMessage._METHOD)
+                    if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.All])
                     {
-                        case "setIdentity":
-                            Console.WriteLine("ID : " + ID);
-                            callback = players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID);
-                            Console.WriteLine(callback);
-                            Sessions.SendTo(callback, ID);
-                            Sessions.SendTo("{\"callbackMessages\":{\"message\":\"Identity Set\"}}", ID);
-                            break;
-                        default:
-                            break;
-                    }
                         
+                    }
+                    else if (newMessage._TARGET == TargetMessage.Target[(int) TargetType.Others])
+                    {
+                        
+                    }
+                    else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.Self])
+                    {
+                        
+                    }
+                    else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.OnlyOne])
+                    {
+                        
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        string OnMessageArgs(ref Message newMessage)
+        {
+            string callback = null;
+            if (newMessage._METHOD != null)
+            {
+                switch (newMessage._METHOD)
+                {
+                    case "setIdentity":
+                        Console.WriteLine("ID : " + ID);
+                        callback = players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID);
+                        Console.WriteLine(callback);
+                        Sessions.SendTo(callback, ID);
+                        Sessions.SendTo("{\"callbackMessages\":{\"message\":\"Identity Set\"}}", ID);
+                        break;
+                    default:
+                        break;
                 }
             }
             return callback;
