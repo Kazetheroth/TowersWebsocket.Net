@@ -16,14 +16,14 @@ namespace TowersWebsocketNet31.Server
         protected override void OnOpen()
         {
             base.OnOpen();
-            var newPlayer = new Player.Player(ID);
+            Player.Player newPlayer = new Player.Player(ID);
             players.Add(newPlayer);
             Console.WriteLine($"New connection->{ID}");
         }
 
         protected override void OnMessage (MessageEventArgs e)
         {
-            Console.WriteLine(e.Data);
+            Console.WriteLine($"Received Message : {e.Data}");
             Message newMessage;
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
@@ -34,7 +34,7 @@ namespace TowersWebsocketNet31.Server
                     /*** ALL TARGET ***/
                     if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.All])
                     {
-                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        List<Player.Player> playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
                             foreach (Player.Player player in playerList)
