@@ -46,7 +46,7 @@ namespace TowersWebsocketNet31
                 case "LOCAL":
                     Console.WriteLine("Is Local");
                     _endpoint = DotNetEnv.Env.GetString("ENDPOINT_LOCAL");
-                    _address = _endpoint;
+                    _address = $"{_endpoint}:{_port}";
                     break;
             }
             Console.WriteLine($"Address : {_address}");
@@ -55,6 +55,7 @@ namespace TowersWebsocketNet31
             //Console.WriteLine(webSocketServer.WebSocketServices["websoket"].Type);
             
             webSocketServer.Start();
+            
             Console.WriteLine("Websocket Server started!");
             Console.ReadKey(true);
             Console.WriteLine("Websocket Server stoped!");

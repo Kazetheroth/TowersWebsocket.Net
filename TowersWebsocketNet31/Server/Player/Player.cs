@@ -1,3 +1,5 @@
+using System;
+
 namespace TowersWebsocketNet31.Server.Player
 {
     public class Player
@@ -11,6 +13,10 @@ namespace TowersWebsocketNet31.Server.Player
         private bool attackReady;
         private bool isBot;
 
+        public Player(string id)
+        {
+            this.id = id;
+        }
         public Player(string id, string roomId, string authToken)
         {
             this.id = id;
@@ -65,5 +71,14 @@ namespace TowersWebsocketNet31.Server.Player
             get => isBot;
             set => isBot = value;
         }
+        
+        public string SetIndentity(string playerToken, string room)
+        {
+            AuthToken = playerToken;
+            roomId = room;
+            Console.WriteLine(id);
+            return "{\"callbackMessages\":{\"message\":\"Identity\", \"identity\":{\"classes\":"+ -1 +", \"weapon\":"+ -1 +"}}}";
+        }
+        
     }
 }
