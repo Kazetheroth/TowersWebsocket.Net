@@ -14,6 +14,7 @@ namespace TowersWebsocketNet31.Server
     public class ArgumentMessage
     {
         public string tokenPlayer { get; set; }
+        public string tokenTarget { get; set; }
         public string room { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Text.Json;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using static TowersWebsocketNet31.Server.TargetMessage;
 
 namespace TowersWebsocketNet31.Server
 {
@@ -24,35 +23,60 @@ namespace TowersWebsocketNet31.Server
 
         protected override void OnMessage (MessageEventArgs e)
         {
-            string callback;
-            
             Console.WriteLine(e.Data);
             Message newMessage;
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                callback = OnMessageArgs(ref newMessage);
+                var callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {
+                    /*** ALL TARGET ***/
                     if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.All])
                     {
-                        
+                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        if (playerList != null)
+                        {
+                            foreach (var player in playerList)
+                            {
+                                Sessions.SendTo(callback, player.Id);
+                            } 
+                        }
                     }
+                    /*** OTHERS TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int) TargetType.Others])
                     {
-                        
+                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        if (playerList != null)
+                        {
+                            foreach (var player in playerList)
+                            {
+                                if (player.Id != ID)
+                                {
+                                    Sessions.SendTo(callback, player.Id);
+                                }
+                            }
+                        }
                     }
+                    /*** SELF TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.Self])
                     {
-                        
+                        Sessions.SendTo(callback, ID);
                     }
+                    /*** ONLY_ONE TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.OnlyOne])
                     {
-                        
-                    }
-                    else
-                    {
-                        return;
+                        var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        if (playerList != null)
+                        {
+                            foreach (var player in playerList)
+                            {
+                                if (player.AuthToken == newMessage._ARGS[0].tokenTarget)
+                                {
+                                    Sessions.SendTo(callback, player.Id);
+                                }
+                            }
+                        }
                     }
                 }
             }
