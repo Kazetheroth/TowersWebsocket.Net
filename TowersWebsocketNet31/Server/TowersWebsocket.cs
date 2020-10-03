@@ -28,7 +28,7 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                var callback = OnMessageArgs(ref newMessage);
+                CallbackMessages callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {
                     /*** ALL TARGET ***/
@@ -37,9 +37,13 @@ namespace TowersWebsocketNet31.Server
                         var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (var player in playerList)
+                            foreach (Player.Player player in playerList)
                             {
-                                Sessions.SendTo(callback, player.Id);
+                                foreach (string returnCallbackMessage in callback.callbacks)
+                                {
+                                    Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
+                                    Sessions.SendTo(returnCallbackMessage, player.Id);
+                                }
                             } 
                         }
                     }
@@ -49,11 +53,15 @@ namespace TowersWebsocketNet31.Server
                         var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (var player in playerList)
+                            foreach (Player.Player player in playerList)
                             {
                                 if (player.Id != ID)
                                 {
-                                    Sessions.SendTo(callback, player.Id);
+                                    foreach (string returnCallbackMessage in callback.callbacks)
+                                    {
+                                        Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
+                                        Sessions.SendTo(returnCallbackMessage, player.Id);
+                                    }
                                 }
                             }
                         }
@@ -61,7 +69,11 @@ namespace TowersWebsocketNet31.Server
                     /*** SELF TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.Self])
                     {
-                        Sessions.SendTo(callback, ID);
+                        foreach (string returnCallbackMessage in callback.callbacks)
+                        {
+                            Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {ID}");
+                            Sessions.SendTo(returnCallbackMessage, ID);
+                        }
                     }
                     /*** ONLY_ONE TARGET ***/
                     else if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.OnlyOne])
@@ -69,32 +81,35 @@ namespace TowersWebsocketNet31.Server
                         var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (var player in playerList)
+                            foreach (Player.Player player in playerList)
                             {
                                 if (player.AuthToken == newMessage._ARGS[0].tokenTarget)
                                 {
-                                    Sessions.SendTo(callback, player.Id);
+                                    foreach (string returnCallbackMessage in callback.callbacks)
+                                    {
+                                        Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
+                                        Sessions.SendTo(returnCallbackMessage, player.Id);
+                                    }
                                 }
                             }
                         }
                     }
+                    /*** END OF CONDITIONS ***/
                 }
             }
         }
 
-        string OnMessageArgs(ref Message newMessage)
+        CallbackMessages OnMessageArgs(ref Message newMessage)
         {
-            string callback = null;
+            CallbackMessages callback = new CallbackMessages(new List<string>());
             if (newMessage._METHOD != null)
             {
                 switch (newMessage._METHOD)
                 {
                     case "setIdentity":
                         Console.WriteLine("ID : " + ID);
-                        callback = players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID);
-                        Console.WriteLine(callback);
-                        Sessions.SendTo(callback, ID);
-                        Sessions.SendTo("{\"callbackMessages\":{\"message\":\"Identity Set\"}}", ID);
+                        callback.callbacks.Add(players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID));
+                        callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"Identity Set\"}}");
                         break;
                     default:
                         break;

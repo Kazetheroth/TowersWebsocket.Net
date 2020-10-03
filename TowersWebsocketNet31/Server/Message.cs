@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TowersWebsocketNet31.Server
 {
     public class Message
@@ -16,5 +18,15 @@ namespace TowersWebsocketNet31.Server
         public string tokenPlayer { get; set; }
         public string tokenTarget { get; set; }
         public string room { get; set; }
+    }
+
+    public class CallbackMessages
+    {
+        public List<string> callbacks;
+
+        public CallbackMessages(List<string> callbacks)
+        {
+            this.callbacks = callbacks;
+        }
     }
 }
