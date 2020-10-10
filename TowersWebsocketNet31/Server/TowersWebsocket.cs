@@ -28,10 +28,12 @@ namespace TowersWebsocketNet31.Server
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
                 CallbackMessages callback = OnMessageArgs(ref newMessage);
-                foreach (Player.Player pl in Program.rooms[0].PlayerList)
+                foreach (var rooms in Program.rooms)
                 {
-                    Console.WriteLine($"Player on GENERAL : {pl.Id}");
+                    Console.WriteLine($"Room : {rooms.Name}");
+                    Console.WriteLine($"Room PlayerList Lenght : {rooms.PlayerList.Count}");
                 }
+                
                 if (callback != null)
                 {
                     /*** ALL TARGET ***/
@@ -128,7 +130,6 @@ namespace TowersWebsocketNet31.Server
         CallbackMessages OnMessageArgs(ref Message newMessage)
         {
             CallbackMessages callback = new CallbackMessages(new List<string>());
-            Message message = newMessage;
             if (newMessage._METHOD != null)
             {
                 switch (newMessage._METHOD)
@@ -136,7 +137,6 @@ namespace TowersWebsocketNet31.Server
                     case "setIdentity":
                         callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID));
                         callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"Identity Set\"}}");
-                        //Program.rooms.Find(x => x.Name == message._ROOMID)?.PlayerList.Add(Program.players.Find(x => x.Id == ID));
                         break;
                     default:
                         break;

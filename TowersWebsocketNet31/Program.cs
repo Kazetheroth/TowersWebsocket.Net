@@ -12,7 +12,7 @@ using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31
 {
-    public class Program
+    public static class Program
     {
         private static string _endpoint;
         private static string _port;
@@ -64,8 +64,8 @@ namespace TowersWebsocketNet31
             
             webSocketServer.Start();
             
-            rooms.Add(new Room(0, "GENERAL", null, 0, 500, "public", false, true, true, true, null));
-            rooms.Add(new Room(0, "MatchmakingWaitinglist", null, 0, 500, "public", false, true, true, true, null));
+            rooms.Add(new Room(0, "GENERAL", null, 0, 500, "public", false, true, true, true, new List<Player>()));
+            rooms.Add(new Room(1, "MatchmakingWaitinglist", null, 0, 500, "public", false, true, true, true, new List<Player>()));
 
             Console.WriteLine("Websocket Server started!");
             Console.ReadKey(true);

@@ -77,6 +77,7 @@ namespace TowersWebsocketNet31.Server.Player
         {
             AuthToken = playerToken;
             roomId = room;
+            Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Add(this);
             Console.WriteLine(id);
             return "{\"callbackMessages\":{\"message\":\"Identity\", \"identity\":{\"classes\":"+ -1 +", \"weapon\":"+ -1 +"}}}";
         }
