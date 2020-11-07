@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace TowersWebsocketNet31.Server
 {
@@ -19,8 +20,19 @@ namespace TowersWebsocketNet31.Server
             "OTHERS"
         };
     }
-    public class Utils
+    public static class Utils
     {
+        public static string GenerateStages()
+        {
+            string result = "";
+            Random rnd = new Random();
+            for (int i = 0; i < 5; i++)
+            {
+                result += rnd.Next(0, 2).ToString();
+            }
+            
+            return result;
+        }
         public static string InvokeStringMethod(string typeName, string methodName, string stringParam)
         {
             // Get the Type for the class

@@ -4,6 +4,7 @@
 
 <body>
     <button onclick="doSend('connection')">Start Connection</button>
+    <button onclick="doSend('searchMatch')">Search Room</button>
 </body>
 
 <script language="javascript" type="text/javascript">
@@ -11,6 +12,25 @@
     var wsUri = "ws://localhost:8091/websocket";
     var output;
     var websocket;
+    var finded = false;
+    var searching = false;
+
+    function coroutine(f) {
+        var o = f(); // instantiate the coroutine
+        o.next(); // execute until the first yield
+        return function(x) {
+            o.next(x);
+        }
+    }
+    // 
+    var searchingMatch = coroutine(function*(){
+        console.log("allo : " + searching);
+        while (searching && !finded){
+            console.log("test");
+            doSend('getRankedMatch');
+            yield;
+        }
+    });
 
     function init()
     {
@@ -30,7 +50,6 @@
     function onOpen(evt)
     {
         writeToScreen("CONNECTED");
-        /*doSend('{}');*/
     }
 
     function onClose(evt)
@@ -54,8 +73,19 @@
         let sendMessage;
         switch (message){
             case 'connection':
-                sendMessage = '{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"GENERAL"}]}'
+                sendMessage = '{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"GENERAL"}]}';
                 break;
+            case 'searchMatch':
+                sendMessage = '{"_TARGET":"SELF","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"joinWaitingRanked","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"MatchmakingWaitinglist"}]}';
+                searching = true;
+                searchingMatch();
+                break;
+            case 'getRankedMatch':
+                sendMessage = '{"_TARGET":"ONLY_ONE","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"getRankedMatch","_ARGS":null}';
+                setInterval(searchingMatch, 5000);
+                writeToScreen("SENT: " + sendMessage);
+                websocket.send(sendMessage);
+                return;
             default:
                 break;
         }
@@ -63,7 +93,7 @@
         websocket.send(sendMessage);
         
     }
-
+    
     function writeToScreen(message)
     {
         var pre = document.createElement("p");

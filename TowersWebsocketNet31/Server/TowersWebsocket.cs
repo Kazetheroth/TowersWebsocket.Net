@@ -10,7 +10,6 @@ namespace TowersWebsocketNet31.Server
     
     public class TowersWebsocket : WebSocketBehavior
     {
-
         protected override void OnOpen()
         {
             base.OnOpen();
@@ -27,13 +26,7 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                CallbackMessages callback = OnMessageArgs(ref newMessage);
-                foreach (var rooms in Program.rooms)
-                {
-                    Console.WriteLine($"Room : {rooms.Name}");
-                    Console.WriteLine($"Room PlayerList Lenght : {rooms.PlayerList.Count}");
-                }
-                
+                Callbacks callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {
                     /*** ALL TARGET ***/
@@ -46,8 +39,7 @@ namespace TowersWebsocketNet31.Server
                             {
                                 foreach (string returnCallbackMessage in callback.callbacks)
                                 {
-                                    Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
-                                    Sessions.SendTo(returnCallbackMessage, player.Id);
+                                    SendToTarget(returnCallbackMessage, player.Id);
                                 }
                             } 
                         }
@@ -64,8 +56,7 @@ namespace TowersWebsocketNet31.Server
                                 {
                                     foreach (string returnCallbackMessage in callback.callbacks)
                                     {
-                                        Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
-                                        Sessions.SendTo(returnCallbackMessage, player.Id);
+                                        SendToTarget(returnCallbackMessage, player.Id);
                                     }
                                 }
                             }
@@ -76,8 +67,7 @@ namespace TowersWebsocketNet31.Server
                     {
                         foreach (string returnCallbackMessage in callback.callbacks)
                         {
-                            Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {ID}");
-                            Sessions.SendTo(returnCallbackMessage, ID);
+                            SendToTarget(returnCallbackMessage, ID);
                         }
                     }
                     /*** ONLY_ONE TARGET ***/
@@ -92,8 +82,7 @@ namespace TowersWebsocketNet31.Server
                                 {
                                     foreach (string returnCallbackMessage in callback.callbacks)
                                     {
-                                        Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {player.Id}");
-                                        Sessions.SendTo(returnCallbackMessage, player.Id);
+                                        SendToTarget(returnCallbackMessage, player.Id);
                                     }
                                 }
                             }
@@ -115,7 +104,7 @@ namespace TowersWebsocketNet31.Server
                 {
                     if (ID != pl.Id)
                     {
-                        Sessions.SendTo("{\"callbackMessages\":{\"message\":\"DEATH\"}}", pl.Id);
+                        SendToTarget("{\"callbackMessages\":{\"message\":\"DEATH\"}}", pl.Id);
                     }
                 }
             }
@@ -125,24 +114,60 @@ namespace TowersWebsocketNet31.Server
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
+            Player.Player player = Program.players.Find(p => p.Id == ID);
+            Room.Room playerRoom = Program.rooms.Find(r => r.Name == player?.RoomId);
+            if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
+            {
+                foreach (Player.Player pl in playerRoom.PlayerList)
+                {
+                    if (ID != pl.Id)
+                    {
+                        SendToTarget("{\"callbackMessages\":{\"message\":\"DEATH\"}}", pl.Id);
+                    }
+                }
+            }
+            Program.players.Remove(player);
         }
 
-        CallbackMessages OnMessageArgs(ref Message newMessage)
+        Callbacks OnMessageArgs(ref Message newMessage)
         {
-            CallbackMessages callback = new CallbackMessages(new List<string>());
+            Callbacks callback = new Callbacks(new List<string>());
             if (newMessage._METHOD != null)
             {
+                Message message = newMessage;
                 switch (newMessage._METHOD)
                 {
                     case "setIdentity":
                         callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.SetIndentity(newMessage._ARGS[0].tokenPlayer, newMessage._ROOMID));
                         callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"Identity Set\"}}");
                         break;
+                    case "joinWaitingRanked":
+                        callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.JoinWaitingRanked(newMessage._ARGS[0].room));
+                        Console.WriteLine($"Room : {Program.rooms[0].Name} - {Program.rooms[0].PlayerList.Count}");
+                        Console.WriteLine($"Room : {Program.rooms[1].Name} - {Program.rooms[1].PlayerList.Count}");
+                        break;
+                    case "getRankedMatch":
+                        //Console.WriteLine(newMessage._ARGS[0]);
+                        if (!Program.players.Find(x => x.Id == ID)?.JoinMatchRanked(this) == true)
+                            callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"Searching Match\"}}");
+                        break;
+                    case "setGameLoaded":
+                        Program.players.Find(x => x.Id == ID)?.SetGameLoaded();
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.StartChooseRoleTimer(this);
+                        break;
                     default:
                         break;
                 }
             }
+
+            callback = callback.callbacks.Count > 0 ? callback : null;
             return callback;
+        }
+
+        public void SendToTarget(string returnCallbackMessage, string id)
+        {
+            Console.WriteLine($"Sending callback : {returnCallbackMessage}\nTo : {id}");
+            Sessions.SendTo(returnCallbackMessage, id);
         }
     }
 }

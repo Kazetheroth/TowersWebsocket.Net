@@ -30,7 +30,7 @@ namespace TowersWebsocketNet31.Chat
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                CallbackMessages callback = OnMessageArgs(ref newMessage);
+                Callbacks callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {
                     /*** ALL TARGET ***/
@@ -112,9 +112,9 @@ namespace TowersWebsocketNet31.Chat
             base.OnError(e);
         }
 
-        CallbackMessages OnMessageArgs(ref Message newMessage)
+        Callbacks OnMessageArgs(ref Message newMessage)
         {
-            CallbackMessages callback = new CallbackMessages(new List<string>());
+            Callbacks callback = new Callbacks(new List<string>());
             if (newMessage._METHOD != null)
             {
                 switch (newMessage._METHOD)

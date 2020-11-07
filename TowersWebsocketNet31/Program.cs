@@ -19,6 +19,7 @@ namespace TowersWebsocketNet31
         private static string _address;
         public static List<Player> players = new List<Player>();
         public static List<Room> rooms = new List<Room>();
+        public static WebSocketServer webSocketServer;
 
         public static void Main(string[] args)
         {
@@ -56,7 +57,7 @@ namespace TowersWebsocketNet31
                     break;
             }
             Console.WriteLine($"Address : {_address}");
-            WebSocketServer webSocketServer = new WebSocketServer(_address);
+            webSocketServer = new WebSocketServer(_address); 
             webSocketServer.AddWebSocketService<TowersWebsocket>("/websocket");
             webSocketServer.AddWebSocketService<ChatWebsocket>("/chat");
 
@@ -64,8 +65,8 @@ namespace TowersWebsocketNet31
             
             webSocketServer.Start();
             
-            rooms.Add(new Room(0, "GENERAL", null, 0, 500, "public", false, true, true, true, new List<Player>()));
-            rooms.Add(new Room(1, "MatchmakingWaitinglist", null, 0, 500, "public", false, true, true, true, new List<Player>()));
+            rooms.Add(new Room(0, "GENERAL", null, 0, 500, "public", false, true, true, true, new List<Player>(), null));
+            rooms.Add(new Room(1, "MatchmakingWaitinglist", null, 0, 500, "public", false, true, true, true, new List<Player>(), null));
 
             Console.WriteLine("Websocket Server started!");
             Console.ReadKey(true);
