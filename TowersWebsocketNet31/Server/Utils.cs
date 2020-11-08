@@ -28,7 +28,7 @@ namespace TowersWebsocketNet31.Server
             Random rnd = new Random();
             for (int i = 0; i < 5; i++)
             {
-                result += rnd.Next(0, 2).ToString();
+                result += rnd.Next(0, 1).ToString();
             }
             
             return result;

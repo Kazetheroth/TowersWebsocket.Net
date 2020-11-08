@@ -153,5 +153,16 @@ namespace TowersWebsocketNet31.Server.Player
             defenseReady = false;
             attackReady = false;
         }
+        
+        public void SetDefenseReady()
+        {
+            defenseReady = true;
+            attackReady = false;
+        }
+        public void SetAttackReady()
+        {
+            defenseReady = false;
+            attackReady = true;
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace TowersWebsocketNet31.Server.Room
         private List<Player.Player> playerList;
         private string stage;
         private int timerValue;
+        private Timer timer = new Timer(1000);
 
         public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Player.Player> playerList, string stage)
         {
@@ -103,28 +104,38 @@ namespace TowersWebsocketNet31.Server.Room
             set => playerList = value;
         }
 
-        public void StartChooseRoleTimer(TowersWebsocket session)
+        public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
         {
             int nbReady = 0;
             foreach (Player.Player player in PlayerList)
             {
-                nbReady = player.GameLoaded ? nbReady + 1 : nbReady;
+                switch (stageString)
+                {
+                    case "roleTimer":
+                        nbReady = player.GameLoaded ? nbReady + 1 : nbReady;
+                        break;
+                    case "defenseTimer":
+                        nbReady = player.DefenseReady ? nbReady + 1 : nbReady;
+                        break;
+                    case "attackTimer":
+                        nbReady = player.AttackReady ? nbReady + 1 : nbReady;
+                        break;
+                }
             }
-
             if (nbReady == 2)
             {
+                timer.Stop();
                 foreach (Player.Player player in PlayerList)
                 {
-                    session.SendToTarget("{\"callbackMessages\":{\"message\":\"LoadGame\"}}", player.Id);
+                    session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);
                 }
-                stage = "roleTimer";
-                timerValue = 100;
-                var timer = new System.Timers.Timer(1000);
+                stage = stageString;
+                timerValue = timerValueInt;
                 timer.Elapsed += OnTimedEvent;
                 timer.Enabled = true;
             }
         }
-        
+
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             if (stage == "roleTimer" || stage == "defenseTimer")
@@ -132,11 +143,13 @@ namespace TowersWebsocketNet31.Server.Room
             else
                 timerValue++;
 
-            if (timerValue <= 0)
+            if (timerValue <= 0 && (stage == "roleTimer" || stage == "defenseTimer"))
+            {
+                timer.Stop();
                 return;
+            }
             WebSocketServiceHost webSocketServiceHost;
             Program.webSocketServer.WebSocketServices.TryGetServiceHost("/websocket", out webSocketServiceHost);
-            //'{"_TARGET":"ALL", "_ROOMID":"' + room + '", "callbackMessages":{"' + timer + '":' + str(seconds) + '}}'
             string callback = "{\"callbackMessages\":{\"" + stage + "\":" + timerValue + "}}";
             Console.WriteLine(callback);
             foreach (Player.Player player in PlayerList)
