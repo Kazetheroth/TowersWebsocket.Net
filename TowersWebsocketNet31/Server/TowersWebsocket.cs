@@ -25,12 +25,23 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 var newMessage = JsonSerializer.Deserialize<Message>(e.Data);
+                
                 if (newMessage.GRID != null)
                 {
-                    
-                    //SendToOthers("{\"GRID\":", );
+                    var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                    if (playerList != null)
+                    {
+                        foreach (Player.Player player in playerList)
+                        {
+                            if (player.Id != ID)
+                            {
+                                SendToTarget("{\"GRID\":\"{" + newMessage.GRID + "}\"}", player.Id);
+                            }
+                        }
+                    }
                     return;
                 }
+                
                 Callbacks callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {
