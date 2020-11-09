@@ -3,8 +3,15 @@
 <title>WebSocket Test</title>
 
 <body>
-    <button onclick="doSend('connection')">Start Connection</button>
-    <button onclick="doSend('searchMatch')">Search Room</button>
+    <button onclick="doSend('connection', 'Dabm1X6cnLnjGllVAiRi')">Start Connection Admin</button>
+    <button onclick="doSend('searchMatch', 'Dabm1X6cnLnjGllVAiRi')">Search Room Admin</button>
+    <button onclick="doSend('getRankedMatch', 'vupHAfwA2mm65TFGBrbO')">Get Ranked Admin</button>
+    <br>
+    <br>
+    <button onclick="doSend('connection', 'vupHAfwA2mm65TFGBrbO')">Start Connection Medhi</button>
+    <button onclick="doSend('searchMatch', 'vupHAfwA2mm65TFGBrbO')">Search Room Medhi</button>
+    <button onclick="doSend('getRankedMatch', 'vupHAfwA2mm65TFGBrbO')">Get Ranked Medhi</button>
+    
 </body>
 
 <script language="javascript" type="text/javascript">
@@ -68,22 +75,20 @@
         writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
     }
 
-    function doSend(message)
+    function doSend(message, user)
     {
         let sendMessage;
         switch (message){
             case 'connection':
-                sendMessage = '{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"GENERAL"}]}';
+                sendMessage = '{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"'+user+'", "room":"GENERAL"}]}';
                 break;
             case 'searchMatch':
-                sendMessage = '{"_TARGET":"SELF","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"joinWaitingRanked","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"MatchmakingWaitinglist"}]}';
+                sendMessage = '{"_TARGET":"SELF","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"joinWaitingRanked","_ARGS":[{"tokenPlayer":"'+user+'", "room":"MatchmakingWaitinglist"}]}';
                 searching = true;
                 searchingMatch();
                 break;
             case 'getRankedMatch':
                 sendMessage = '{"_TARGET":"ONLY_ONE","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"getRankedMatch","_ARGS":null}';
-                setInterval(searchingMatch, 5000);
-                writeToScreen("SENT: " + sendMessage);
                 websocket.send(sendMessage);
                 return;
             default:

@@ -25,6 +25,12 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 var newMessage = JsonSerializer.Deserialize<Message>(e.Data);
+                if (newMessage.GRID != null)
+                {
+                    
+                    //SendToOthers("{\"GRID\":", );
+                    return;
+                }
                 Callbacks callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
                 {

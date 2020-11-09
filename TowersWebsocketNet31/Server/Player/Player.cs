@@ -107,7 +107,6 @@ namespace TowersWebsocketNet31.Server.Player
         }
         public bool JoinMatchRanked(TowersWebsocket session)
         {
-            Console.WriteLine("HelloTryingToCreateRoom");
             if (Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Count >= 2)
             {
                 Player opponent = Program.rooms.Find(x => x.Name == roomId)?.PlayerList
