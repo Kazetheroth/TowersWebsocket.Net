@@ -35,7 +35,7 @@ namespace TowersWebsocketNet31.Server
                         {
                             if (player.Id != ID)
                             {
-                                SendToTarget("{\"GRID\":\"{" + newMessage.GRID + "}\"}", player.Id);
+                                SendToTarget("{\"GRID\":\"" + newMessage.GRID + "\"}", player.Id);
                             }
                         }
                     }
@@ -197,7 +197,7 @@ namespace TowersWebsocketNet31.Server
                         break;
                     case "setAttackReady":
                         Program.players.Find(x => x.Id == ID)?.SetAttackReady();
-                        Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "attackTimer", "StartDefense", 0);
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "attackTimer", "StartAttack", 0);
                         break;
                     default:
                         break;
