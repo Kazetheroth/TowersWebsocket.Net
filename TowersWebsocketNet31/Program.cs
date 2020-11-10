@@ -33,7 +33,9 @@ namespace TowersWebsocketNet31
             }
             else
             {
-                DotNetEnv.Env.Load("/app/TowersWebsocket.Net/TowersWebsocketNet31/towers.env");
+                string path = "./TowersWebsocket.Net/TowersWebsocketNet31/towers.env";
+                Console.WriteLine($"Address : {path}");
+                DotNetEnv.Env.Load(path);
             }
             
             _port = DotNetEnv.Env.GetString("PORT");
