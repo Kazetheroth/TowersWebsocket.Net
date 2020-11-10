@@ -16,28 +16,9 @@
 
 <script type="text/javascript">
 
-    var wsUri = "wss://localhost:8091/websocket";
+    var wsUri = "ws://localhost:8091/websocket";
     var output;
-    var websocket;
-    var finded = false;
-    var searching = false;
-
-    function coroutine(f) {
-        var o = f(); // instantiate the coroutine
-        o.next(); // execute until the first yield
-        return function(x) {
-            o.next(x);
-        }
-    }
-    // 
-    var searchingMatch = coroutine(function*(){
-        console.log("allo : " + searching);
-        while (searching && !finded){
-            console.log("test");
-            doSend('getRankedMatch');
-            yield;
-        }
-    });
+    var websocket;    
 
     function init()
     {
@@ -84,12 +65,9 @@
                 break;
             case 'searchMatch':
                 sendMessage = '{"_TARGET":"SELF","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"joinWaitingRanked","_ARGS":[{"tokenPlayer":"'+user+'", "room":"MatchmakingWaitinglist"}]}';
-                searching = true;
-                searchingMatch();
                 break;
             case 'getRankedMatch':
                 sendMessage = '{"_TARGET":"ONLY_ONE","_ROOMID":"MatchmakingWaitinglist","_CLASS":"null","_METHOD":"getRankedMatch","_ARGS":null}';
-                websocket.send(sendMessage);
                 return;
             default:
                 break;
