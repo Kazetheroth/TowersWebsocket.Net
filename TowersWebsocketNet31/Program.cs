@@ -26,7 +26,7 @@ namespace TowersWebsocketNet31
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {
-                using (var stream = File.OpenRead("towers.env"))
+                using (var stream = File.OpenRead("../../../towers.env"))
                 {
                     DotNetEnv.Env.Load(stream);
                 }
