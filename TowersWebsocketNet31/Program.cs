@@ -26,14 +26,14 @@ namespace TowersWebsocketNet31
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {
-                using (var stream = File.OpenRead("/app/TowersWebsocket.Net/TowersWebsocketNet31/towers.env"))
+                using (var stream = File.OpenRead("../../../towers.env"))
                 {
                     DotNetEnv.Env.Load(stream);
                 }
             }
             else
             {
-                DotNetEnv.Env.Load("./towers.env");
+                DotNetEnv.Env.Load("/app/TowersWebsocket.Net/TowersWebsocketNet31/towers.env");
             }
             
             _port = DotNetEnv.Env.GetString("PORT");
