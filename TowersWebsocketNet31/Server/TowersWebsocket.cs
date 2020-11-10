@@ -85,6 +85,7 @@ namespace TowersWebsocketNet31.Server
                     }
                 }
             }
+            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(player);
             Program.players.Remove(player);
         }
 
@@ -103,6 +104,7 @@ namespace TowersWebsocketNet31.Server
                     }
                 }
             }
+            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(player);
             Program.players.Remove(player);
         }
 
@@ -181,6 +183,12 @@ namespace TowersWebsocketNet31.Server
                         callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.JoinWaitingRanked(newMessage._ARGS[0].room));
                         Console.WriteLine($"Room : {Program.rooms[0].Name} - {Program.rooms[0].PlayerList.Count}");
                         Console.WriteLine($"Room : {Program.rooms[1].Name} - {Program.rooms[1].PlayerList.Count}");
+                        break;
+                    case "quitMatchmaking":
+                        callback.callbacks.Add(Program.players.Find(x => x.Id == ID)?.QuitMatchmaking("GENERAL"));
+                        Console.WriteLine($"Room : {Program.rooms[0].Name} - {Program.rooms[0].PlayerList.Count}");
+                        Console.WriteLine($"Room : {Program.rooms[1].Name} - {Program.rooms[1].PlayerList.Count}");
+                        
                         break;
                     case "getRankedMatch":
                         //Console.WriteLine(newMessage._ARGS[0]);

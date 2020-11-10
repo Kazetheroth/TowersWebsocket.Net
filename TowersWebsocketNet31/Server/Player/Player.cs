@@ -105,6 +105,13 @@ namespace TowersWebsocketNet31.Server.Player
             Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Add(this);
             return "{\"callbackMessages\":{\"message\":\"WaitingForRanked\"}}";
         }
+        public string QuitMatchmaking(string room)
+        {
+            Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Remove(this);
+            roomId = room;
+            Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Add(this);
+            return "{\"callbackMessages\":{\"message\":\"LeavingMatchmaking\"}}";
+        }
         public bool JoinMatchRanked(TowersWebsocket session)
         {
             if (Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Count >= 2)
