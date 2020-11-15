@@ -5,9 +5,9 @@ using RestSharp;
 using RestSharp.Serialization.Json;
 
 
-namespace TowersWebsocketNet31.Server.Player
+namespace TowersWebsocketNet31.Server.Account
 {
-    public class Player
+    public class Account
     {
         private string id;
         private string roomId;
@@ -18,11 +18,11 @@ namespace TowersWebsocketNet31.Server.Player
         private bool attackReady;
         private bool isBot;
 
-        public Player(string id)
+        public Account(string id)
         {
             this.id = id;
         }
-        public Player(string id, string roomId, string authToken)
+        public Account(string id, string roomId, string authToken)
         {
             this.id = id;
             this.roomId = roomId;
@@ -85,11 +85,11 @@ namespace TowersWebsocketNet31.Server.Player
             bool searching = true;
             while (searching)
             {
-                Player player = Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Find(y => y.AuthToken == playerToken);
-                searching = player != null;
+                Account account = Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Find(y => y.AuthToken == playerToken);
+                searching = account != null;
                 if (searching)
                 {
-                    Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Remove(player);
+                    Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Remove(account);
                 }
             }
             
@@ -116,7 +116,7 @@ namespace TowersWebsocketNet31.Server.Player
         {
             if (Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Count >= 2)
             {
-                Player opponent = Program.rooms.Find(x => x.Name == roomId)?.PlayerList
+                Account opponent = Program.rooms.Find(x => x.Name == roomId)?.PlayerList
                     .Find(y => y.authToken != this.authToken);
                 if (opponent != null)
                 {
@@ -132,7 +132,7 @@ namespace TowersWebsocketNet31.Server.Player
                         try
                         {
                             Console.WriteLine(content);
-                            List<Player> players = new List<Player>();
+                            List<Account> players = new List<Account>();
                             players.Add(this);
                             players.Add(opponent);
                             Program.rooms.Add(new Room.Room(Program.rooms.Count, content, null, 0, 2, "1v1", true, true, true, false, players, null));

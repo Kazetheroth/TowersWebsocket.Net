@@ -11,14 +11,14 @@ namespace TowersWebsocketNet31.Chat
     
     public class ChatWebsocket : WebSocketBehavior
     {
-        public static List<Server.Player.Player> players = new List<Server.Player.Player>();
+        public static List<Server.Account.Account> players = new List<Server.Account.Account>();
         public static List<Server.Room.Room> rooms = new List<Server.Room.Room>();
         
         protected override void OnOpen()
         {
             base.OnOpen();
-            Server.Player.Player newPlayer = new Server.Player.Player(ID);
-            players.Add(newPlayer);
+            Server.Account.Account newAccount = new Server.Account.Account(ID);
+            players.Add(newAccount);
             Console.WriteLine($"New connection->{ID}");
         }
 
@@ -36,10 +36,10 @@ namespace TowersWebsocketNet31.Chat
                     /*** ALL TARGET ***/
                     if (newMessage._TARGET == TargetMessage.Target[(int)TargetType.All])
                     {
-                        List<Server.Player.Player> playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+                        List<Server.Account.Account> playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Server.Player.Player player in playerList)
+                            foreach (Server.Account.Account player in playerList)
                             {
                                 foreach (string returnCallbackMessage in callback.callbacks)
                                 {
@@ -55,7 +55,7 @@ namespace TowersWebsocketNet31.Chat
                         var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Server.Player.Player player in playerList)
+                            foreach (Server.Account.Account player in playerList)
                             {
                                 if (player.Id != ID)
                                 {
@@ -83,7 +83,7 @@ namespace TowersWebsocketNet31.Chat
                         var playerList = rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                         if (playerList != null)
                         {
-                            foreach (Server.Player.Player player in playerList)
+                            foreach (Server.Account.Account player in playerList)
                             {
                                 if (player.AuthToken == newMessage._ARGS[0].tokenTarget)
                                 {

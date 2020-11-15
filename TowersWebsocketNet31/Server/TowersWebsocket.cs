@@ -13,8 +13,8 @@ namespace TowersWebsocketNet31.Server
         protected override void OnOpen()
         {
             base.OnOpen();
-            Player.Player newPlayer = new Player.Player(ID);
-            Program.players.Add(newPlayer);
+            Account.Account newAccount = new Account.Account(ID);
+            Program.players.Add(newAccount);
             Console.WriteLine($"New connection->{ID}");
         }
 
@@ -31,7 +31,7 @@ namespace TowersWebsocketNet31.Server
                     var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
                     if (playerList != null)
                     {
-                        foreach (Player.Player player in playerList)
+                        foreach (Account.Account player in playerList)
                         {
                             if (player.Id != ID)
                             {
@@ -73,11 +73,11 @@ namespace TowersWebsocketNet31.Server
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
-            Player.Player player = Program.players.Find(p => p.Id == ID);
-            Room.Room playerRoom = Program.rooms.Find(r => r.Name == player?.RoomId);
+            Account.Account account = Program.players.Find(p => p.Id == ID);
+            Room.Room playerRoom = Program.rooms.Find(r => r.Name == account?.RoomId);
             if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
             {
-                foreach (Player.Player pl in playerRoom.PlayerList)
+                foreach (Account.Account pl in playerRoom.PlayerList)
                 {
                     if (ID != pl.Id)
                     {
@@ -85,18 +85,18 @@ namespace TowersWebsocketNet31.Server
                     }
                 }
             }
-            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(player);
-            Program.players.Remove(player);
+            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(account);
+            Program.players.Remove(account);
         }
 
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
-            Player.Player player = Program.players.Find(p => p.Id == ID);
-            Room.Room playerRoom = Program.rooms.Find(r => r.Name == player?.RoomId);
+            Account.Account account = Program.players.Find(p => p.Id == ID);
+            Room.Room playerRoom = Program.rooms.Find(r => r.Name == account?.RoomId);
             if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
             {
-                foreach (Player.Player pl in playerRoom.PlayerList)
+                foreach (Account.Account pl in playerRoom.PlayerList)
                 {
                     if (ID != pl.Id)
                     {
@@ -104,16 +104,16 @@ namespace TowersWebsocketNet31.Server
                     }
                 }
             }
-            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(player);
-            Program.players.Remove(player);
+            Program.rooms.Find(x => playerRoom != null && x.Name == playerRoom.Name)?.PlayerList.Remove(account);
+            Program.players.Remove(account);
         }
 
         private void SendToAll(Message newMessage, Callbacks callback)
         {
-            List<Player.Player> playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            List<Account.Account> playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
             if (playerList != null)
             {
-                foreach (Player.Player player in playerList)
+                foreach (Account.Account player in playerList)
                 {
                     foreach (string returnCallbackMessage in callback.callbacks)
                     {
@@ -136,7 +136,7 @@ namespace TowersWebsocketNet31.Server
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
             if (playerList != null)
             {
-                foreach (Player.Player player in playerList)
+                foreach (Account.Account player in playerList)
                 {
                     if (player.Id != ID)
                     {
@@ -154,7 +154,7 @@ namespace TowersWebsocketNet31.Server
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
             if (playerList != null)
             {
-                foreach (Player.Player player in playerList)
+                foreach (Account.Account player in playerList)
                 {
                     if (player.AuthToken == newMessage._ARGS[0].tokenTarget)
                     {

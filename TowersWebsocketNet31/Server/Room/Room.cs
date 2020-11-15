@@ -17,12 +17,12 @@ namespace TowersWebsocketNet31.Server.Room
         private bool isPublic;
         private bool isLaunched;
         private bool hasEnded;
-        private List<Player.Player> playerList;
+        private List<Account.Account> playerList;
         private string stage;
         private int timerValue;
         private Timer timer = new Timer(1000);
 
-        public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Player.Player> playerList, string stage)
+        public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Account.Account> playerList, string stage)
         {
             this.id = id;
             this.name = name;
@@ -98,7 +98,7 @@ namespace TowersWebsocketNet31.Server.Room
             set => hasEnded = value;
         }
 
-        public List<Player.Player> PlayerList
+        public List<Account.Account> PlayerList
         {
             get => playerList;
             set => playerList = value;
@@ -107,7 +107,7 @@ namespace TowersWebsocketNet31.Server.Room
         public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
         {
             int nbReady = 0;
-            foreach (Player.Player player in PlayerList)
+            foreach (Account.Account player in PlayerList)
             {
                 switch (stageString)
                 {
@@ -125,7 +125,7 @@ namespace TowersWebsocketNet31.Server.Room
             if (nbReady == 2)
             {
                 timer.Stop();
-                foreach (Player.Player player in PlayerList)
+                foreach (Account.Account player in PlayerList)
                 {
                     session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);
                 }
@@ -152,7 +152,7 @@ namespace TowersWebsocketNet31.Server.Room
             Program.webSocketServer.WebSocketServices.TryGetServiceHost("/websocket", out webSocketServiceHost);
             string callback = "{\"callbackMessages\":{\"" + stage + "\":" + timerValue + "}}";
             Console.WriteLine(callback);
-            foreach (Player.Player player in PlayerList)
+            foreach (Account.Account player in PlayerList)
             {
                 webSocketServiceHost.Sessions.SendTo(callback, player.Id);
             }
