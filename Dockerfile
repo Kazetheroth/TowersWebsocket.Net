@@ -3,7 +3,7 @@ WORKDIR /app
 RUN git clone https://github.com/Kazetheroth/TowersWebsocket.Net.git
 WORKDIR /app/TowersWebsocket.Net
 RUN git fetch origin
-RUN git checkout -b local origin/local
+RUN git checkout -b ImplementEntity origin/ImplementEntity
 RUN dotnet build ../TowersWebsocket.Net/TowersWebsocketNet31/TowersWebsocketNet31.csproj
 RUN chmod +x /app/TowersWebsocket.Net/TowersWebsocketNet31/towers.env
 EXPOSE 80
