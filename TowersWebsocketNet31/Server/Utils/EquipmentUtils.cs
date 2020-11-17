@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Games.Global.Armors;
 using Games.Global.Weapons;
-using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
 
 namespace TowersWebsocketNet31.Server
@@ -14,7 +13,7 @@ namespace TowersWebsocketNet31.Server
     [Serializable]
     public class EquipmentJsonList
     {
-        public List<EquipmentJsonObject> equipment;
+        public List<EquipmentJsonObject> equipment { get; set; }
     }
     
     [Serializable]
@@ -163,21 +162,16 @@ namespace TowersWebsocketNet31.Server
             weapon.damage = Int32.Parse(damage);
             weapon.category = (CategoryWeapon)Int32.Parse(category);
             weapon.type = (TypeWeapon)Int32.Parse(type);
-            //weapon.rarity = (Rarity)Int32.Parse(rarity);
-            //weapon.lootRate = Int32.Parse(lootRate);
+            weapon.rarity = (Rarity)Int32.Parse(rarity);
+            weapon.lootRate = Int32.Parse(lootRate);
             weapon.equipmentName = name;
             weapon.cost = Int32.Parse(cost);
             weapon.attSpeed = Int32.Parse(attSpeed);
-            //weapon.modelName = model;
-            //weapon.sprite = Resources.Load<Texture2D>(spritePath);
             weapon.equipmentType = (EquipmentType)Int32.Parse(equipmentType);
 
             return weapon;
         }
-        
-        // TODO Need to fix some error in ConvertToArmor()
-        
-        /*
+
         public Armor ConvertToArmor()
         {
             Armor armor = new Armor
@@ -187,14 +181,12 @@ namespace TowersWebsocketNet31.Server
                 lootRate = Int32.Parse(lootRate),
                 equipmentName = name,
                 cost = Int32.Parse(cost),
-                modelName = model,
-                sprite = Resources.Load<Texture2D>(spritePath),
                 equipmentType = (EquipmentType)Int32.Parse(equipmentType),
                 armorCategory = (CategoryArmor)Int32.Parse(category),
                 def = Int32.Parse(damage)
             };
 
             return armor;
-        }*/
+        }
     }
 }

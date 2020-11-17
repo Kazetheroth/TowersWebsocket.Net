@@ -9,7 +9,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
     [Serializable]
     public class GroupsMonsterList
     {
-        public List<GroupsJsonObject> groups;
+        public List<GroupsJsonObject> groups { get; set; }
     }
 
     [Serializable]
@@ -40,7 +40,6 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
         public Monster GetMonsterById(int id)
         {
             Monster cloneMonster = Utils.Clone(monsterList.First(monster => monster.id == id));
-            //cloneMonster.InitEntityList();
             cloneMonster.InitSpells();
             cloneMonster.typeEntity = TypeEntity.MOB;
             return cloneMonster;
@@ -63,12 +62,6 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
                     foreach (MobJsonObject mob in groupsJson.monsterList)
                     {
                         Monster monster = mob.ConvertToMonster();
-                        
-                        // TODO Need to delete this ???
-                        /*if (monsterGameObjects != null && monsterGameObjects.ToList().Exists(model => model.name == monster.modelName))
-                        {
-                            monster.model = monsterGameObjects.First(model => model.name == monster.modelName);
-                        }*/
 
                         if (!monsterList.Exists(monsterAdded => monsterAdded.id == monster.id))
                         {
@@ -76,11 +69,11 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
                         }
                     }
                 }
-                // TODO Reimplementation of DictionaryManager ???
-                //DictionaryManager.hasMonstersLoad = true;
             }
             catch (Exception e)
             {
+                Console.WriteLine("ERROR at the creation of MonsterList");
+                Console.WriteLine(json);
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.Data);
             }

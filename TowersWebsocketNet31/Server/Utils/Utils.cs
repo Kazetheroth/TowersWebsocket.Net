@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Cryptography;
-using TowersWebsocketNet31.Server.Game.EntityData;
-using TowersWebsocketNet31.Server.Game.EquipmentData;
 
 namespace TowersWebsocketNet31.Server
 {

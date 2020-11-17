@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using TowersWebsocketNet31.Chat;
 using TowersWebsocketNet31.Server;
 using TowersWebsocketNet31.Server.Account;
-using TowersWebsocketNet31.Server.Game.Controller;
-using TowersWebsocketNet31.Server.Game.EntityData;
-using TowersWebsocketNet31.Server.Game.Mechanics;
+using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Room;
-using TowersWebsocketNet31.Server.Test;
 using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31
@@ -30,8 +25,8 @@ namespace TowersWebsocketNet31
         {
             //await TestMain.RunTestAsyncOneEffect();
 
-            TestLoadCards.LoadCards();
-            
+            await DataObject.InitDictionary();
+
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {
@@ -83,7 +78,6 @@ namespace TowersWebsocketNet31
             Console.ReadKey(true);
             Console.WriteLine("Websocket Server stoped!");
             webSocketServer.Stop();
-            
         }
     }
 }

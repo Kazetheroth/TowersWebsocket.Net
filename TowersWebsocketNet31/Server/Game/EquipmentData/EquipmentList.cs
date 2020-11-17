@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Games.Global.Armors;
-using TowersWebsocketNet31.Server.Game.EntityData;
 
 namespace TowersWebsocketNet31.Server.Game.EquipmentData
 {
@@ -39,14 +38,13 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
             Armor cloneWeapon = Utils.Clone(findingWeapon);
             return cloneWeapon;
         }
-        
-        // TODO Armor don't have any id ???
-        /*public Armor GetArmorWithId(int id)
+
+        public Armor GetArmorWithId(int id)
         {
             Armor findingWeapon = armors.First(we => we.id == id);
             Armor cloneWeapon = Utils.Clone(findingWeapon);
             return cloneWeapon;
-        }*/
+        }
 
         public void PrintDictionnary()
         {
@@ -63,7 +61,6 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
             try
             {
                 EquipmentJsonList equipmentList = JsonSerializer.Deserialize<EquipmentJsonList>(json);
-
                 foreach (EquipmentJsonObject equipmentJsonObject in equipmentList.equipment)
                 {
                     EquipmentType type = (EquipmentType) Int32.Parse(equipmentJsonObject.equipmentType);
@@ -72,33 +69,19 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
                     {
                         Weapon loadedWeapon = equipmentJsonObject.ConvertToWeapon();
 
-                        /*if (equipmentGameObject != null && equipmentGameObject.Length > 0 && equipmentGameObject.ToList().Exists(go => go.name == loadedWeapon.modelName))
-                        {
-                            loadedWeapon.model = equipmentGameObject.First(go => go.name == loadedWeapon.modelName);
-                        }*/
-
                         weapons.Add(loadedWeapon);
                     }
                     else
                     {
-                        //Armor loadedArmor = equipmentJsonObject.ConvertToArmor();
+                        Armor loadedArmor = equipmentJsonObject.ConvertToArmor();
 
-                        /*if (equipmentGameObject != null && equipmentGameObject.Length > 0 && equipmentGameObject.ToList().Exists(go => go.name == loadedArmor.modelName))
-                        {
-                            loadedArmor.model = equipmentGameObject.First(go => go.name == loadedArmor.modelName);
-                        }*/
-
-                        //armors.Add(loadedArmor);
-                        Console.WriteLine("Implementation Needed");
+                        armors.Add(loadedArmor);
                     }
-
                 }
-
-                //DictionaryManager.hasWeaponsLoad = true;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("Error at the creation of EquipmentList");
                 Console.WriteLine(json);
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.Data);

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using TowersWebsocketNet31.Server.Game.Controller;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.Mechanics;
@@ -32,7 +31,7 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
         HANDGUN
     }
 
-    public class Weapon : Equipement
+    public class Weapon : Equipment
     {
         public int id { get; set; }
         public CategoryWeapon category { get; set; }

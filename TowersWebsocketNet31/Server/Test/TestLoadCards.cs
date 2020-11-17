@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text.Json;
 using RestSharp;
-using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.Models;
 
 namespace TowersWebsocketNet31.Server.Test
