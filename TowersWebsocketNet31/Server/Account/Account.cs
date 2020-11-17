@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Serialization.Json;
+using TowersWebsocketNet31.Server.Game;
 
 
 namespace TowersWebsocketNet31.Server.Account
@@ -17,6 +18,8 @@ namespace TowersWebsocketNet31.Server.Account
         private bool defenseReady;
         private bool attackReady;
         private bool isBot;
+
+        private GameInstance currentGameInstance;
 
         public Account(string id)
         {
@@ -159,7 +162,7 @@ namespace TowersWebsocketNet31.Server.Account
             defenseReady = false;
             attackReady = false;
         }
-        
+
         public void SetDefenseReady()
         {
             defenseReady = true;
@@ -169,6 +172,11 @@ namespace TowersWebsocketNet31.Server.Account
         {
             defenseReady = false;
             attackReady = true;
+        }
+
+        public void InitGameInstance()
+        {
+            currentGameInstance = new GameInstance();
         }
     }
 }

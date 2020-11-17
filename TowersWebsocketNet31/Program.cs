@@ -4,10 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using TowersWebsocketNet31.Chat;
 using TowersWebsocketNet31.Server;
 using TowersWebsocketNet31.Server.Account;
+using TowersWebsocketNet31.Server.Game.Controller;
+using TowersWebsocketNet31.Server.Game.EntityData;
+using TowersWebsocketNet31.Server.Game.Mechanics;
 using TowersWebsocketNet31.Server.Room;
+using TowersWebsocketNet31.Server.Test;
 using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31
@@ -21,8 +26,10 @@ namespace TowersWebsocketNet31
         public static List<Room> rooms = new List<Room>();
         public static WebSocketServer webSocketServer;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            await TestMain.RunTestAsyncOneEffect();
+            return;
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {

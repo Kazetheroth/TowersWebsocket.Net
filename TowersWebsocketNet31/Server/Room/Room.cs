@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Timers;
+using TowersWebsocketNet31.Server.Game;
 using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31.Server.Room
@@ -21,6 +22,8 @@ namespace TowersWebsocketNet31.Server.Room
         private string stage;
         private int timerValue;
         private Timer timer = new Timer(1000);
+
+        private Game.GameInstance gameInstance;
 
         public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Account.Account> playerList, string stage)
         {
@@ -124,9 +127,19 @@ namespace TowersWebsocketNet31.Server.Room
             }
             if (nbReady == 2)
             {
+                if (stageString == "attackTimer")
+                {
+                    gameInstance = new GameInstance();
+                }
+                
                 timer.Stop();
                 foreach (Account.Account player in PlayerList)
                 {
+                    if (stageString == "attackTimer")
+                    {
+                        gameInstance.SendGameData(session);
+                    }
+                    
                     session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);
                 }
                 stage = stageString;

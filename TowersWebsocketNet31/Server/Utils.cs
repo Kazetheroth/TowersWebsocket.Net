@@ -52,5 +52,43 @@ namespace TowersWebsocketNet31.Server
             // Return the string that was returned by the called method.
             return s;
         }
+        
+        public static T Clone<T>(T origin) where T: new()
+        {
+            T clone = new T();
+            PropertyInfo[] propertyInfos = origin.GetType().GetProperties(BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance);
+
+            foreach (PropertyInfo propertyInfo in propertyInfos)
+            {
+                if (propertyInfo.GetType().IsArray)
+                {
+                    Array array = (Array)propertyInfo.GetValue(origin);
+                    Array targetArray = Array.CreateInstance(propertyInfo.GetType(), array.Length);
+                    
+                    for (int i = 0; i < array.Length; ++i)
+                    {
+                        object o = array.GetValue(i);
+
+                        if (o.GetType().GetConstructor(Type.EmptyTypes) != null)
+                        {
+                            targetArray.SetValue(Clone(o), i);
+                        }
+                        else
+                        {
+                            targetArray.SetValue(o, i);
+                        }
+                        
+                    }
+
+                    propertyInfo.SetValue(clone, targetArray);
+                }
+                else
+                {
+                    propertyInfo.SetValue(clone, propertyInfo.GetValue(origin));
+                }
+            }
+
+            return clone;
+        }
     }
 }
