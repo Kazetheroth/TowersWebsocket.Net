@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Timers;
 using TowersWebsocketNet31.Server.Game;
+using TowersWebsocketNet31.Server.Game.Mechanics;
 using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31.Server.Room
@@ -22,6 +23,8 @@ namespace TowersWebsocketNet31.Server.Room
         private string stage;
         private int timerValue;
         private Timer timer = new Timer(1000);
+
+        private Grid grid;
 
         private Game.GameInstance gameInstance;
 
@@ -107,9 +110,20 @@ namespace TowersWebsocketNet31.Server.Room
             set => playerList = value;
         }
 
+        public Grid Grid
+        {
+            get => grid;
+        }
+
+        public void GenerateGrid()
+        {
+            grid = new Grid();
+        }
+
         public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
         {
             int nbReady = 0;
+            
             foreach (Account.Account player in PlayerList)
             {
                 switch (stageString)
@@ -127,11 +141,11 @@ namespace TowersWebsocketNet31.Server.Room
             }
             if (nbReady == 2)
             {
-                if (stageString == "attackTimer")
+                if (stageString == "defenseTimer")
                 {
-                    gameInstance = new GameInstance();
+                    GenerateGrid();
                 }
-                
+
                 timer.Stop();
                 foreach (Account.Account player in PlayerList)
                 {

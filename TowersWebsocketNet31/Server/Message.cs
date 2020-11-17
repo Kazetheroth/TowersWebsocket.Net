@@ -19,6 +19,12 @@ namespace TowersWebsocketNet31.Server
         public string tokenPlayer { get; set; }
         public string tokenTarget { get; set; }
         public string room { get; set; }
+
+        // Init Game
+        public string classes { get; set; }
+        public string weapon { get; set; }
+        public string equipmentDeck { get; set; }
+        public string monsterDeck { get; set; }
     }
 
     public class Callbacks

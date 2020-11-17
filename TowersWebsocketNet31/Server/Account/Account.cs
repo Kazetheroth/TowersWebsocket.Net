@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Serialization.Json;
 using TowersWebsocketNet31.Server.Game;
+using TowersWebsocketNet31.Server.Game.EntityData;
+using TowersWebsocketNet31.Server.Game.EquipmentData;
 
 
 namespace TowersWebsocketNet31.Server.Account
@@ -174,9 +176,15 @@ namespace TowersWebsocketNet31.Server.Account
             attackReady = true;
         }
 
-        public void InitGameInstance()
+        public void InitGameInstance(string classes, string weapon, string equipmentDeck, string monsterDeck)
         {
-            currentGameInstance = new GameInstance();
+            Classes wantedClass = Enum.Parse<Classes>(classes);
+            CategoryWeapon typeWeapon = Enum.Parse<CategoryWeapon>(weapon);
+            int idEquipmentDeck = Int32.Parse(equipmentDeck);
+            int idMonsterDeck = Int32.Parse(monsterDeck);
+            int idPlayer = 1;
+
+            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.Grid);
         }
     }
 }
