@@ -28,8 +28,10 @@ namespace TowersWebsocketNet31
 
         public static async Task Main(string[] args)
         {
-            await TestMain.RunTestAsyncOneEffect();
-            return;
+            //await TestMain.RunTestAsyncOneEffect();
+
+            TestLoadCards.LoadCards();
+            
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {
@@ -81,6 +83,7 @@ namespace TowersWebsocketNet31
             Console.ReadKey(true);
             Console.WriteLine("Websocket Server stoped!");
             webSocketServer.Stop();
+            
         }
     }
 }

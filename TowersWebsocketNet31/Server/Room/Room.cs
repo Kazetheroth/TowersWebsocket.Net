@@ -23,7 +23,7 @@ namespace TowersWebsocketNet31.Server.Room
         private int timerValue;
         private Timer timer = new Timer(1000);
 
-        private Game.GameInstance gameInstance;
+        private List<Game.GameInstance> gameInstance;
 
         public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Account.Account> playerList, string stage)
         {
@@ -129,7 +129,7 @@ namespace TowersWebsocketNet31.Server.Room
             {
                 if (stageString == "attackTimer")
                 {
-                    gameInstance = new GameInstance();
+                    //gameInstance = new GameInstance();
                 }
                 
                 timer.Stop();
@@ -137,7 +137,7 @@ namespace TowersWebsocketNet31.Server.Room
                 {
                     if (stageString == "attackTimer")
                     {
-                        gameInstance.SendGameData(session);
+                        //gameInstance.SendGameData(session);
                     }
                     
                     session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);

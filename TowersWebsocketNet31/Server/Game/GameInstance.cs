@@ -12,6 +12,8 @@ namespace TowersWebsocketNet31.Server.Game
         public string mapJson;
         public List<Entity> players;
         public List<Entity> monsters;
+        /*public List<> deck;
+        public List<> hand;*/
 
         public readonly string headerDataInit = "GameInstance";
 
