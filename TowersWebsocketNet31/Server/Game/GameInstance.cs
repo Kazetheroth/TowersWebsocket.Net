@@ -16,6 +16,8 @@ namespace TowersWebsocketNet31.Server.Game
 
         public List<Entity> otherPlayers;
         public List<Entity> monsters;
+        /*public List<> deck;
+        public List<> hand;*/
 
         public Grid grid;
         

@@ -1,4 +1,4 @@
-﻿﻿namespace TowersWebsocketNet31.Server.Game.EntityData
+﻿﻿ namespace TowersWebsocketNet31.Server.Game.EquipmentData
 {
     public enum EquipmentType
     {
@@ -7,7 +7,7 @@
     }
 
     //Class for equipements
-    public abstract class Equipement
+    public abstract class Equipment : Item
     {
         public int cost { get; set; }
         public string equipmentName { get; set; }

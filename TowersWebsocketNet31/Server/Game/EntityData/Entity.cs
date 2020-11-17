@@ -244,7 +244,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
 
         public virtual void ApplyDamage(float directDamage, SpellComponent originSpellComponent = null)
         {
-            //Debug.Log(modelName + " - Damage applied = " + directDamage);
+            //Console.WriteLine(modelName + " - Damage applied = " + directDamage);
             hp -= directDamage;
             
             if (hp <= 0)
@@ -273,7 +273,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
                 {
                     TowersWebSocket.TowerSender("OTHERS", NetworkingController.CurrentRoomToken, "Player", "SendDeath", null);
                     TowersWebSocket.TowerSender("SELF", NetworkingController.CurrentRoomToken, "Player", "HasWon", null);
-                    Debug.Log("Vous êtes mort");
+                    Console.WriteLine("Vous êtes mort");
                     Cursor.lockState = CursorLockMode.None;
                 }
                 */
