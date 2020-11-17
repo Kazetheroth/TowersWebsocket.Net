@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
-using RestSharp;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
 
@@ -25,8 +23,8 @@ namespace TowersWebsocketNet31.Server.Game.Models
             Card card = new Card
             {
                 id = Int32.Parse(id),
-                /*GroupsMonster = monsterGroupId != null ? DataObject.MonsterList.GetGroupsMonsterById(Int32.Parse(monsterGroupId)) : null,
-                Weapon = weaponId != null ? DataObject.EquipmentList.GetWeaponWithId(Int32.Parse(weaponId)) : null*/
+                GroupsMonster = monsterGroupId != null ? DataObject.MonsterList.GetGroupsMonsterById(Int32.Parse(monsterGroupId)) : null,
+                //Weapon = weaponId != null ? DataObject.EquipmentList.GetWeaponWithId(Int32.Parse(weaponId)) : null*/
             };
 
             return card;

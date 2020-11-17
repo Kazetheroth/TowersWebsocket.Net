@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Cryptography;
+using TowersWebsocketNet31.Server.Game.EntityData;
+using TowersWebsocketNet31.Server.Game.EquipmentData;
 
 namespace TowersWebsocketNet31.Server
 {
@@ -11,15 +14,18 @@ namespace TowersWebsocketNet31.Server
         Self,
         Others
     }
+
     public static class TargetMessage
     {
-        public static readonly string[] Target = {
+        public static readonly string[] Target =
+        {
             "ALL",
             "ONLY_ONE",
             "SELF",
             "OTHERS"
         };
     }
+
     public static class Utils
     {
         public static string GenerateStages()
@@ -30,9 +36,10 @@ namespace TowersWebsocketNet31.Server
             {
                 result += rnd.Next(0, 1).ToString();
             }
-            
+
             return result;
         }
+
         public static string InvokeStringMethod(string typeName, string methodName, string stringParam)
         {
             // Get the Type for the class
@@ -41,30 +48,31 @@ namespace TowersWebsocketNet31.Server
             // Invoke the method itself. The string returned by the method winds up in s.
             // Note that stringParam is passed via the last parameter of InvokeMember,
             // as an array of Objects.
-            String s = (String)calledType.InvokeMember(
+            String s = (String) calledType.InvokeMember(
                 methodName,
-                BindingFlags.InvokeMethod | BindingFlags.Public | 
+                BindingFlags.InvokeMethod | BindingFlags.Public |
                 BindingFlags.Static,
                 null,
                 null,
-                new Object[] { stringParam });
+                new Object[] {stringParam});
 
             // Return the string that was returned by the called method.
             return s;
         }
-        
-        public static T Clone<T>(T origin) where T: new()
+
+        public static T Clone<T>(T origin) where T : new()
         {
             T clone = new T();
-            PropertyInfo[] propertyInfos = origin.GetType().GetProperties(BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance);
+            PropertyInfo[] propertyInfos = origin.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
                 if (propertyInfo.GetType().IsArray)
                 {
-                    Array array = (Array)propertyInfo.GetValue(origin);
+                    Array array = (Array) propertyInfo.GetValue(origin);
                     Array targetArray = Array.CreateInstance(propertyInfo.GetType(), array.Length);
-                    
+
                     for (int i = 0; i < array.Length; ++i)
                     {
                         object o = array.GetValue(i);
@@ -77,7 +85,7 @@ namespace TowersWebsocketNet31.Server
                         {
                             targetArray.SetValue(o, i);
                         }
-                        
+
                     }
 
                     propertyInfo.SetValue(clone, targetArray);
@@ -90,5 +98,12 @@ namespace TowersWebsocketNet31.Server
 
             return clone;
         }
+    }
+
+    public abstract class ObjectParsed
+    {
+        public abstract void InsertValue(string key, string value);
+
+        public abstract void DoSomething();
     }
 }
