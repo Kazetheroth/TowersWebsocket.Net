@@ -142,9 +142,9 @@ namespace TowersWebsocketNet31.Server.Room
             {
                 if (stageString == "defenseTimer")
                 {
-                    gameInstance = new GameInstance();
+                    GenerateGrid();
                 }
-
+                
                 timer.Stop();
                 foreach (Account.Account player in PlayerList)
                 {
