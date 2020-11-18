@@ -1,5 +1,4 @@
 #!/bin/sh
-
 clear
 ls -l /app/server/TowersWebsocketNet31
 cp ./server/TowersWebsocketNet31/TowersWebsocketNet31.csproj ./server/TowersWebsocketNet31/TowersWebsocketNet31Server.csproj
