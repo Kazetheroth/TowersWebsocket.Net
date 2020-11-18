@@ -6,10 +6,6 @@ using TowersWebsocketNet31.Server.Game.EquipmentData;
 
 namespace TowersWebsocketNet31.Server
 {
-    public class EquipmentUtils
-    {
-        
-    }
     [Serializable]
     public class EquipmentJsonList
     {

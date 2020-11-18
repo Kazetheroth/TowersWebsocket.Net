@@ -6,6 +6,7 @@ using RestSharp.Serialization.Json;
 using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
+using TowersWebsocketNet31.Server.Game.Models;
 
 
 namespace TowersWebsocketNet31.Server.Account
@@ -22,6 +23,8 @@ namespace TowersWebsocketNet31.Server.Account
         private bool isBot;
 
         private GameInstance currentGameInstance;
+        private List<Deck> decks;
+        private Dictionary<int, int> cardInCollection;
 
         public Account(string id)
         {
@@ -82,7 +85,19 @@ namespace TowersWebsocketNet31.Server.Account
             get => isBot;
             set => isBot = value;
         }
-        
+
+        public List<Deck> Decks
+        {
+            get => decks;
+            set => decks = value;
+        }
+
+        public Dictionary<int, int> CardInCollection
+        {
+            get => cardInCollection;
+            set => cardInCollection = value;
+        }
+
         public string SetIndentity(string playerToken, string room)
         {
             AuthToken = playerToken;
@@ -97,6 +112,12 @@ namespace TowersWebsocketNet31.Server.Account
                     Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Remove(account);
                 }
             }
+
+            DataObject.LoadDeckAndCollection(this);
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine(decks.Count);
+            Console.WriteLine(cardInCollection.Count);
             
             Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Add(this);
             Console.WriteLine(id);

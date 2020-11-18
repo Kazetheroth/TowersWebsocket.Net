@@ -45,5 +45,61 @@ namespace TowersWebsocketNet31.Server.Game.Models
                 Console.WriteLine(e.Data);
             }
         }
+
+        public void InitDeck(Account.Account account, string json)
+        {
+            try
+            {
+                DeckJsonList deckJsonList = JsonSerializer.Deserialize<DeckJsonList>(json);
+
+                if (deckJsonList == null)
+                {
+                    return;
+                }
+
+                List<Deck> decks = new List<Deck>();
+
+                foreach (DeckJsonObject deckJsonObject in deckJsonList.decks)
+                {
+                    decks.Add(deckJsonObject.ConvertToDeck());
+                }
+
+                account.Decks = decks;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.Data);
+            }
+        }
+
+        public void InitCollection(Account.Account account, string json)
+        {
+            try
+            {
+                CollectionJsonList collectionList = JsonSerializer.Deserialize<CollectionJsonList>(json);
+
+                if (collectionList == null)
+                {
+                    return;
+                }
+
+                List<Deck> decks = new List<Deck>();
+
+                Dictionary<int, int> cardsInCollection = new Dictionary<int, int>();
+                
+                foreach (CardInCollection cardInCollection in collectionList.collections)
+                {
+                    cardsInCollection.Add(Int32.Parse(cardInCollection.cardId), Int32.Parse(cardInCollection.numbers));
+                }
+
+                account.CardInCollection = cardsInCollection;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.Data);
+            }
+        }
     }
 }

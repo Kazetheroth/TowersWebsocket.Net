@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using RestSharp;
 using TowersWebsocketNet31.Server.Game.EntityData;
@@ -64,6 +65,39 @@ namespace TowersWebsocketNet31.Server.Game
             if (response.IsSuccessful)
             {
                 CardList = new CardList(content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+        }
+
+        public static void LoadDeckAndCollection(Account.Account account)
+        {   
+            RestClient api = new RestClient("https://www.towers.heolia.eu");
+            RestRequest request = new RestRequest("services/game/card/listCardDeck.php");
+            request.AddParameter("deckOwner", account.AuthToken);
+            var response = api.Post(request);
+            var content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                CardList.InitDeck(account, content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+
+            api = new RestClient("https://www.towers.heolia.eu");
+            request = new RestRequest("services/game/card/listAccountCollection.php");
+            request.AddParameter("collectionOwner", account.AuthToken);
+            response = api.Post(request);
+            content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                CardList.InitCollection(account, content);
             }
             else
             {
