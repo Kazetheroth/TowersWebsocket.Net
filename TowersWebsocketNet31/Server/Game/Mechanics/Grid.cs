@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TowersWebsocketNet31.Server.Game.Mechanics
 {
@@ -13,18 +14,20 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
         None
     }
     
+    [Serializable]
     public class GridCellData
     {
-        public CellType cellType;
-        public int x;
-        public int y;
+        public CellType cellType { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
     }
     
+    [Serializable]
     public class Grid
     {
-        public int index;
-        public int size;
-        public List<GridCellData> gridCellDatas;
+        public int index { get; set; }
+        public int size { get; set; }
+        public List<GridCellData> gridCellDatas { get; set; }
 
         public Grid()
         {

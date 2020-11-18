@@ -162,7 +162,7 @@ namespace TowersWebsocketNet31.Server.Account
                             players.Add(this);
                             players.Add(opponent);
                             Program.rooms.Add(new Room.Room(Program.rooms.Count, content, null, 0, 2, "1v1", true, true, true, false, players, null));
-                            string callback = "{\"callbackMessages\":{\"room\":\"" + content + "\", \"message\":\"MatchStart\", \"maps\":[" + Utils.GenerateStages() + "]}}";
+                            string callback = "{\"callbackMessages\":{\"room\":\"" + content + "\", \"message\":\"MatchStart\"}}";
                             session.SendToTarget(callback, id);
                             session.SendToTarget(callback, opponent.id);
                             return true;
@@ -172,7 +172,6 @@ namespace TowersWebsocketNet31.Server.Account
                             Console.WriteLine(e);
                             throw;
                         }
-                        
                     }
                 }
             }

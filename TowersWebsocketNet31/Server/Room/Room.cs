@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Timers;
-using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.Mechanics;
 using WebSocketSharp.Server;
 
@@ -152,8 +152,17 @@ namespace TowersWebsocketNet31.Server.Room
                     {
                         //gameInstance.SendGameData(session);
                     }
-                    
-                    session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);
+
+                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"";
+
+                    if (stageString == "defenseTimer")
+                    {
+                        messageToSend += ", \"maps\":\"" + JsonSerializer.Serialize(grid) + "\"";
+                    }
+
+                    messageToSend += "}}";
+
+                    session.SendToTarget(messageToSend, player.Id);
                 }
                 stage = stageString;
                 timerValue = timerValueInt;
