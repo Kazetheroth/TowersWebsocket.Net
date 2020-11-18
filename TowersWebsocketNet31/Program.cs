@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using TowersWebsocketNet31.Chat;
 using TowersWebsocketNet31.Server;
 using TowersWebsocketNet31.Server.Account;
+using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Room;
 using WebSocketSharp.Server;
 
@@ -21,8 +21,12 @@ namespace TowersWebsocketNet31
         public static List<Room> rooms = new List<Room>();
         public static WebSocketServer webSocketServer;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            //await TestMain.RunTestAsyncOneEffect();
+
+            await DataObject.InitDictionary();
+
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             if (isWindows)
             {
@@ -33,7 +37,7 @@ namespace TowersWebsocketNet31
             }
             else
             {
-                string path = "./TowersWebsocket.Net/TowersWebsocketNet31/towers.env";
+                string path = "/app/server/TowersWebsocketNet31/towers.env";
                 Console.WriteLine($"Address : {path}");
                 DotNetEnv.Env.Load(path);
             }

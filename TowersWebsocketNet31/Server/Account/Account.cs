@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Serialization.Json;
+using TowersWebsocketNet31.Server.Game;
+using TowersWebsocketNet31.Server.Game.EntityData;
+using TowersWebsocketNet31.Server.Game.EquipmentData;
+using TowersWebsocketNet31.Server.Game.Models;
 
 
 namespace TowersWebsocketNet31.Server.Account
@@ -17,6 +21,10 @@ namespace TowersWebsocketNet31.Server.Account
         private bool defenseReady;
         private bool attackReady;
         private bool isBot;
+
+        private GameInstance currentGameInstance;
+        private List<Deck> decks;
+        private Dictionary<int, int> cardInCollection;
 
         public Account(string id)
         {
@@ -77,7 +85,19 @@ namespace TowersWebsocketNet31.Server.Account
             get => isBot;
             set => isBot = value;
         }
-        
+
+        public List<Deck> Decks
+        {
+            get => decks;
+            set => decks = value;
+        }
+
+        public Dictionary<int, int> CardInCollection
+        {
+            get => cardInCollection;
+            set => cardInCollection = value;
+        }
+
         public string SetIndentity(string playerToken, string room)
         {
             AuthToken = playerToken;
@@ -92,6 +112,12 @@ namespace TowersWebsocketNet31.Server.Account
                     Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Remove(account);
                 }
             }
+
+            DataObject.LoadDeckAndCollection(this);
+
+            Console.WriteLine("==================================================================");
+            Console.WriteLine(decks.Count);
+            Console.WriteLine(cardInCollection.Count);
             
             Program.rooms.Find(x => x.Name == roomId)?.PlayerList.Add(this);
             Console.WriteLine(id);
@@ -159,7 +185,7 @@ namespace TowersWebsocketNet31.Server.Account
             defenseReady = false;
             attackReady = false;
         }
-        
+
         public void SetDefenseReady()
         {
             defenseReady = true;
@@ -169,6 +195,17 @@ namespace TowersWebsocketNet31.Server.Account
         {
             defenseReady = false;
             attackReady = true;
+        }
+
+        public void InitGameInstance(string classes, string weapon, string equipmentDeck, string monsterDeck)
+        {
+            Classes wantedClass = Enum.Parse<Classes>(classes);
+            CategoryWeapon typeWeapon = Enum.Parse<CategoryWeapon>(weapon);
+            int idEquipmentDeck = Int32.Parse(equipmentDeck);
+            int idMonsterDeck = Int32.Parse(monsterDeck);
+            int idPlayer = 1;
+
+            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.Grid);
         }
     }
 }

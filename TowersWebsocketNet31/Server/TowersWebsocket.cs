@@ -199,6 +199,9 @@ namespace TowersWebsocketNet31.Server
                         Program.players.Find(x => x.Id == ID)?.SetGameLoaded();
                         Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "roleTimer", "LoadGame", 100);
                         break;
+                    case "initGame":
+                        Program.players.Find(x => x.Id == ID)?.InitGameInstance(newMessage._ARGS[0].classes, newMessage._ARGS[0].weapon, newMessage._ARGS[0].equipmentDeck, newMessage._ARGS[0].monsterDeck);
+                        break;
                     case "setDefenseReady":
                         Program.players.Find(x => x.Id == ID)?.SetDefenseReady();
                         Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "defenseTimer", "StartDefense", 120);
