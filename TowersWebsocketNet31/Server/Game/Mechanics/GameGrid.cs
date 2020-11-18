@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using TowersWebsocketNet31.Server.Game.EntityData;
+using TowersWebsocketNet31.Server.Game.Models;
 
 namespace TowersWebsocketNet31.Server.Game.Mechanics
 {
     public enum CellType
     {
-        Group,
-        Trap,
+        ObjectToInstantiate,
         Wall,
         Hole,
         Spawn,
         End,
         None
+    }
+    
+    public enum ThemeGrid
+    {
+        Dungeon
     }
     
     [Serializable]
@@ -28,14 +34,11 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
         public int x { get; set; }
         public int y { get; set; }
 
-        public int idNeeded { get; set; }
-        public Vector3 rotation { get; set; }
-
-        public int idMeleeWeapon { get; set; }
-        public int idDistanceWeapon { get; set; }
-        public int idHelmetArmor { get; set; }
-        public int idChestplateArmor { get; set; }
-        public int idLeggingsArmor { get; set; }
+        public ThemeGrid theme { get; set; }
+        
+        public int rotationY { get; set; }
+        public GroupsMonster groupsMonster { get; set; } = null;
+        public TrapBehavior trap { get; set; } = null;
     }
     
     [Serializable]
