@@ -15,6 +15,12 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
     }
     
     [Serializable]
+    public class GridCellDataList
+    {
+        public List<GridCellData> gridCellDatas { get; set; }
+    }
+    
+    [Serializable]
     public class GridCellData
     {
         public CellType cellType { get; set; }
@@ -23,15 +29,16 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
     }
     
     [Serializable]
-    public class Grid
+    public class GameGrid
     {
         public int index { get; set; }
         public int size { get; set; }
-        public List<GridCellData> gridCellDatas { get; set; }
+        public GridCellDataList gridCellDataList { get; set; }
 
-        public Grid()
+        public GameGrid()
         {
-            gridCellDatas = new List<GridCellData>();
+            gridCellDataList = new GridCellDataList();
+            gridCellDataList.gridCellDatas = new List<GridCellData>();
             
             size = 20;
             for (int i = 0; i < size; ++i)
@@ -48,7 +55,7 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
                         cellType = CellType.End;
                     }
                     
-                    gridCellDatas.Add(new GridCellData
+                    gridCellDataList.gridCellDatas.Add(new GridCellData
                     {
                         x = i,
                         y = j,

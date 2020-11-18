@@ -19,14 +19,14 @@ namespace TowersWebsocketNet31.Server.Game
         /*public List<> deck;
         public List<> hand;*/
 
-        public Grid grid;
+        public GameGrid GameGrid;
         
         public readonly string headerDataInit = "GameInstance";
 
-        public GameInstance(int idPlayer, Classes classes, CategoryWeapon categoryWeapon, int idEquipmentdeck, int idMonsterDeck, Grid grid)
+        public GameInstance(int idPlayer, Classes classes, CategoryWeapon categoryWeapon, int idEquipmentdeck, int idMonsterDeck, GameGrid gameGrid)
         {
             this.idPlayer = idPlayer;
-            this.grid = grid;
+            this.GameGrid = gameGrid;
             player = new Player(classes, categoryWeapon);
         }
 

@@ -204,7 +204,7 @@ namespace TowersWebsocketNet31.Server.Account
             int idMonsterDeck = Int32.Parse(monsterDeck);
             int idPlayer = 1;
 
-            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.Grid);
+            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.GameGrid);
         }
     }
 }

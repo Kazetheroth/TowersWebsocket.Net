@@ -24,7 +24,7 @@ namespace TowersWebsocketNet31.Server.Room
         private int timerValue;
         private Timer timer = new Timer(1000);
 
-        private Grid grid;
+        private GameGrid gameGrid;
         private List<Game.GameInstance> gameInstance;
 
         public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Account.Account> playerList, string stage)
@@ -109,14 +109,14 @@ namespace TowersWebsocketNet31.Server.Room
             set => playerList = value;
         }
 
-        public Grid Grid
+        public GameGrid GameGrid
         {
-            get => grid;
+            get => gameGrid;
         }
 
         public void GenerateGrid()
         {
-            grid = new Grid();
+            gameGrid = new GameGrid();
         }
 
         public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
@@ -157,7 +157,7 @@ namespace TowersWebsocketNet31.Server.Room
 
                     if (stageString == "defenseTimer")
                     {
-                        messageToSend += ", \"maps\":\"" + JsonSerializer.Serialize(grid) + "\"";
+                        messageToSend += ",\"maps\":" + JsonSerializer.Serialize(gameGrid);
                     }
 
                     messageToSend += "}}";
