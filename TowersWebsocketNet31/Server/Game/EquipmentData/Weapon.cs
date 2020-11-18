@@ -53,21 +53,21 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
 
         public void InitPlayerSkill(Classes classe)
         {
-            switch (classe)
-            {
-                case Classes.Warrior:
-                    InitWeaponSpellWithJson(warriorSpells);
-                    break;
-                case Classes.Mage:
-                    InitWeaponSpellWithJson(mageSpells);
-                    break;
-                case Classes.Rogue:
-                    InitWeaponSpellWithJson(rogueSpells);
-                    break;
-                case Classes.Ranger:
-                    InitWeaponSpellWithJson(rangerSpells);
-                    break;
-            }
+//            switch (classe)
+//            {
+//                case Classes.Warrior:
+//                    InitWeaponSpellWithJson(warriorSpells);
+//                    break;
+//                case Classes.Mage:
+//                    InitWeaponSpellWithJson(mageSpells);
+//                    break;
+//                case Classes.Rogue:
+//                    InitWeaponSpellWithJson(rogueSpells);
+//                    break;
+//                case Classes.Ranger:
+//                    InitWeaponSpellWithJson(rangerSpells);
+//                    break;
+//            }
         }
 
         public void InitWeapon()
