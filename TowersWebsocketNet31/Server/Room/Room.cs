@@ -182,6 +182,8 @@ namespace TowersWebsocketNet31.Server.Room
                 }
                 stage = stageString;
                 timerValue = timerValueInt;
+
+                timer = new Timer(1000);
                 timer.Elapsed += OnTimedEvent;
                 timer.Enabled = true;
             }
@@ -197,12 +199,13 @@ namespace TowersWebsocketNet31.Server.Room
             if (timerValue <= 0 && (stage == "roleTimer" || stage == "defenseTimer"))
             {
                 timer.Stop();
+                // TODO : send callback
                 return;
             }
             WebSocketServiceHost webSocketServiceHost;
             Program.webSocketServer.WebSocketServices.TryGetServiceHost("/websocket", out webSocketServiceHost);
             string callback = "{\"callbackMessages\":{\"" + stage + "\":" + timerValue + "}}";
-            Console.WriteLine(callback);
+
             foreach (Account.Account player in PlayerList)
             {
                 webSocketServiceHost.Sessions.SendTo(callback, player.Id);
