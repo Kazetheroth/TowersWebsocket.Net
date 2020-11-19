@@ -33,12 +33,10 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
         public CellType cellType { get; set; }
         public int x { get; set; }
         public int y { get; set; }
-
-        public ThemeGrid theme { get; set; }
         
         public int rotationY { get; set; }
         public GroupsMonster groupsMonster { get; set; } = null;
-        public TrapBehavior trap { get; set; } = null;
+        public TrapData trap { get; set; } = null;
     }
     
     [Serializable]
@@ -47,6 +45,8 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
         public int index { get; set; }
         public int size { get; set; }
         public GridCellDataList gridCellDataList { get; set; }
+
+        public ThemeGrid theme { get; set; }
 
         public GameGrid()
         {
