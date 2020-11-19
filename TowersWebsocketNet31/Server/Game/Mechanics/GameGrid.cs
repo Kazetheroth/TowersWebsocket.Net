@@ -8,12 +8,12 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
 {
     public enum CellType
     {
+        None,
         ObjectToInstantiate,
         Wall,
         Hole,
         Spawn,
-        End,
-        None
+        End
     }
     
     public enum ThemeGrid

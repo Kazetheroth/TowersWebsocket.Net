@@ -217,7 +217,7 @@ namespace TowersWebsocketNet31.Server
                     case "waitingForAttackGrid":
                         Program.players.Find(x => x.Id == ID)?.SetWaitingForAttackGrid();
                         Program.players.Find(x => x.Id != ID)?.SetNewGrid(newMessage._ARGS[0].gameGrid);
-                        Program.rooms.Find(x => x.Name == message._ROOMID)?.SendAttackGridToPlayer("LoadAttackGrid");
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.SendAttackGridToPlayer(this, "LoadAttackGrid");
                         break;
                 }
             }

@@ -119,7 +119,7 @@ namespace TowersWebsocketNet31.Server.Room
             gameGrid = new GameGrid();
         }
 
-        public void SendAttackGridToPlayer(string message)
+        public void SendAttackGridToPlayer(TowersWebsocket session, string message)
         {
             int nbReady = 0;
             
@@ -130,7 +130,13 @@ namespace TowersWebsocketNet31.Server.Room
 
             if (nbReady == 2)
             {
-                string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(gameGrid) + "}}";
+                for (int i = 0; i < PlayerList.Count; ++i)
+                {
+                    GameGrid grid = PlayerList[(i + 1) % PlayerList.Count].CurrentGameInstance.GameGrid;
+
+                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(grid) + "}}";
+                    session.SendToTarget(messageToSend, PlayerList[i].Id);
+                }
             }
         }
 

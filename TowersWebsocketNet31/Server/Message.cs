@@ -27,7 +27,7 @@ namespace TowersWebsocketNet31.Server
         public string monsterDeck { get; set; }
         
         // Init grid
-        public GameGrid gameGrid { get; set; } = null;
+        public GameGrid gameGrid { get; set; }
     }
 
     public class Callbacks

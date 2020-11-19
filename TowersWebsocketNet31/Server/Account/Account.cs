@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 using RestSharp;
-using RestSharp.Serialization.Json;
 using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
@@ -86,6 +85,12 @@ namespace TowersWebsocketNet31.Server.Account
         {
             get => waitingForAttackGrid;
             set => waitingForAttackGrid = value;
+        }
+
+        public GameInstance CurrentGameInstance
+        {
+            get => currentGameInstance;
+            set => currentGameInstance = value;
         }
 
         public bool IsBot
