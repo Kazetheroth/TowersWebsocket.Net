@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Logs" />
       <Folder Include="obj\Debug\netcoreapp3.1" />
     </ItemGroup>
 

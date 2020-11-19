@@ -27,7 +27,7 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 var newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                
+                LoggerUtils.WriteToLogFile(newMessage._ROOMID, e.Data);
 //                if (newMessage.GRID != null)
 //                {
 //                    var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
@@ -113,12 +113,14 @@ namespace TowersWebsocketNet31.Server
         private void SendToAll(Message newMessage, Callbacks callback)
         {
             List<Account.Account> playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
                 {
                     foreach (string returnCallbackMessage in callback.callbacks)
                     {
+                        LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                         SendToTarget(returnCallbackMessage, player.Id);
                     }
                 } 
@@ -127,8 +129,10 @@ namespace TowersWebsocketNet31.Server
 
         private void SendToSelf(Message newMessage, Callbacks callback)
         {
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             foreach (string returnCallbackMessage in callback.callbacks)
             {
+                LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                 SendToTarget(returnCallbackMessage, ID);
             }
         }
@@ -136,6 +140,7 @@ namespace TowersWebsocketNet31.Server
         private void SendToOthers(Message newMessage, Callbacks callback)
         {
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
@@ -144,6 +149,7 @@ namespace TowersWebsocketNet31.Server
                     {
                         foreach (string returnCallbackMessage in callback.callbacks)
                         {
+                            LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                             SendToTarget(returnCallbackMessage, player.Id);
                         }
                     }
@@ -154,6 +160,7 @@ namespace TowersWebsocketNet31.Server
         private void SendToTarget(Message newMessage, Callbacks callback)
         {
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
@@ -162,6 +169,7 @@ namespace TowersWebsocketNet31.Server
                     {
                         foreach (string returnCallbackMessage in callback.callbacks)
                         {
+                            LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                             SendToTarget(returnCallbackMessage, player.Id);
                         }
                     }

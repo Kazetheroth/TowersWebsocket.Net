@@ -114,6 +114,11 @@ namespace TowersWebsocketNet31.Server.Room
             get => gameGrid;
         }
 
+        public void CreateRoomLog()
+        {
+            LoggerUtils.WriteToLogFile(name, $"###################### {name} ######################");
+        }
+
         public void GenerateGrid()
         {
             gameGrid = new GameGrid();
