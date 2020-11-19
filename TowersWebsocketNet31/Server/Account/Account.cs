@@ -6,6 +6,7 @@ using RestSharp.Serialization.Json;
 using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
+using TowersWebsocketNet31.Server.Game.Mechanics;
 using TowersWebsocketNet31.Server.Game.Models;
 
 
@@ -20,6 +21,7 @@ namespace TowersWebsocketNet31.Server.Account
         private bool defenseEnd;
         private bool defenseReady;
         private bool attackReady;
+        private bool waitingForAttackGrid;
         private bool isBot;
 
         private GameInstance currentGameInstance;
@@ -78,6 +80,12 @@ namespace TowersWebsocketNet31.Server.Account
         {
             get => attackReady;
             set => attackReady = value;
+        }
+
+        public bool WaitingForAttackGrid
+        {
+            get => waitingForAttackGrid;
+            set => waitingForAttackGrid = value;
         }
 
         public bool IsBot
@@ -181,19 +189,29 @@ namespace TowersWebsocketNet31.Server.Account
         public void SetGameLoaded()
         {
             gameLoaded = true;
+            waitingForAttackGrid = false;
             defenseReady = false;
             attackReady = false;
         }
 
         public void SetDefenseReady()
         {
+            waitingForAttackGrid = false;
             defenseReady = true;
             attackReady = false;
         }
         public void SetAttackReady()
         {
+            waitingForAttackGrid = false;
             defenseReady = false;
             attackReady = true;
+        }
+        
+        public void SetWaitingForAttackGrid()
+        {
+            waitingForAttackGrid = true;
+            defenseReady = false;
+            attackReady = false;
         }
 
         public void InitGameInstance(string classes, string weapon, string equipmentDeck, string monsterDeck)
@@ -205,6 +223,12 @@ namespace TowersWebsocketNet31.Server.Account
             int idPlayer = 1;
 
             currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.GameGrid);
+        }
+
+        public void SetNewGrid(GameGrid gameGrid)
+        {
+            // Check grid ?
+            currentGameInstance.GameGrid = gameGrid;
         }
     }
 }

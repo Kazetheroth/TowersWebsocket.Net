@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TowersWebsocketNet31.Server.Game.Mechanics;
 
 namespace TowersWebsocketNet31.Server
 {
@@ -8,7 +9,6 @@ namespace TowersWebsocketNet31.Server
         public string _TARGET { get; set; }
         public string _ROOMID { get; set; }
         public string _SENDER { get; set; }
-        public string GRID { get; set; }
         public string _CLASS { get; set; }
         public string _METHOD { get; set; }
         public ArgumentMessage[] _ARGS { get; set; }
@@ -25,6 +25,9 @@ namespace TowersWebsocketNet31.Server
         public string weapon { get; set; }
         public string equipmentDeck { get; set; }
         public string monsterDeck { get; set; }
+        
+        // Init grid
+        public GameGrid gameGrid { get; set; } = null;
     }
 
     public class Callbacks

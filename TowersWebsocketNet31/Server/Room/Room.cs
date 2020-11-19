@@ -119,6 +119,21 @@ namespace TowersWebsocketNet31.Server.Room
             gameGrid = new GameGrid();
         }
 
+        public void SendAttackGridToPlayer(string message)
+        {
+            int nbReady = 0;
+            
+            foreach (Account.Account player in PlayerList)
+            {
+                nbReady = player.WaitingForAttackGrid ? nbReady + 1 : nbReady;
+            }
+
+            if (nbReady == 2)
+            {
+                string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(gameGrid) + "}}";
+            }
+        }
+
         public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
         {
             int nbReady = 0;
@@ -148,11 +163,6 @@ namespace TowersWebsocketNet31.Server.Room
                 timer.Stop();
                 foreach (Account.Account player in PlayerList)
                 {
-                    if (stageString == "attackTimer")
-                    {
-                        //gameInstance.SendGameData(session);
-                    }
-
                     string messageToSend = "{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"";
 
                     if (stageString == "defenseTimer")
