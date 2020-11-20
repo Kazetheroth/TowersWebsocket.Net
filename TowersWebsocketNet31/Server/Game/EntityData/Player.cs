@@ -97,7 +97,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
                 spell.isOnCooldown = false;
             }
 
-            underEffects.Clear();
+            ClearUnderEffect();
             damageDealExtraEffect.Clear();
             damageReceiveExtraEffect.Clear();
             activeSpellComponents.Clear();

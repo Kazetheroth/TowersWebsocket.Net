@@ -24,17 +24,17 @@ namespace TowersWebsocketNet31.Server.Game.Controller
             {
                 targetsFound.targets.ForEach(target =>
                 {
-                    if (target.underEffects.ContainsKey(effect.typeEffect))
+                    if (target.EntityIsUnderEffect(effect.typeEffect))
                     {
-                        StopCurrentEffect(target, target.underEffects[effect.typeEffect]);
+                        StopCurrentEffect(target, target.TryGetEffectInUnderEffect(effect.typeEffect));
                     }
                 });
             } 
             else if (targetsFound.target != null)
             {
-                if (targetsFound.target.underEffects.ContainsKey(effect.typeEffect))
+                if (targetsFound.target.EntityIsUnderEffect(effect.typeEffect))
                 {
-                    StopCurrentEffect(targetsFound.target, targetsFound.target.underEffects[effect.typeEffect]);
+                    StopCurrentEffect(targetsFound.target, targetsFound.target.TryGetEffectInUnderEffect(effect.typeEffect));
                 }
             }
         }
@@ -76,9 +76,9 @@ namespace TowersWebsocketNet31.Server.Game.Controller
                 }
             }
 
-            if (entityAffected.underEffects.ContainsKey(effect.typeEffect))
+            if (entityAffected.EntityIsUnderEffect(effect.typeEffect))
             {
-                Effect effectInList = entityAffected.underEffects[effect.typeEffect];
+                Effect effectInList = entityAffected.TryGetEffectInUnderEffect(effect.typeEffect);
                 effectInList.UpdateEffect(entityAffected, effect);
 
                 return null;
@@ -91,7 +91,7 @@ namespace TowersWebsocketNet31.Server.Game.Controller
         {
             Effect cloneEffect = Utils.Clone(effect);
             cloneEffect.launcher = origin;
-            entity.underEffects.Add(effect.typeEffect, cloneEffect);
+            entity.AddEffectInUnderEffect(cloneEffect);
 
             Task currentTask = PlayEffectOnTime(entity, cloneEffect);
 
@@ -138,7 +138,7 @@ namespace TowersWebsocketNet31.Server.Game.Controller
 
             effect.EndEffect(entity);
 
-            entity.underEffects.Remove(effect.typeEffect);
+            entity.RemoveUnderEffect(effect.typeEffect);
         }
     }
 }
