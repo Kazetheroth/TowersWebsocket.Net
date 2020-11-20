@@ -114,11 +114,6 @@ namespace TowersWebsocketNet31.Server.Room
             get => gameGrid;
         }
 
-        public void CreateRoomLog()
-        {
-            LoggerUtils.WriteToLogFile(name, $"###################### {name} ######################");
-        }
-
         public void GenerateGrid()
         {
             gameGrid = new GameGrid();
@@ -137,9 +132,7 @@ namespace TowersWebsocketNet31.Server.Room
             {
                 for (int i = 0; i < PlayerList.Count; ++i)
                 {
-                    GameGrid grid = PlayerList[(i + 1) % PlayerList.Count].CurrentGameInstance.GameGrid;
-
-                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(grid) + "}}";
+                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(PlayerList[i].CurrentGameInstance.GameGrid) + "}}";
                     session.SendToTarget(messageToSend, PlayerList[i].Id);
                 }
             }
