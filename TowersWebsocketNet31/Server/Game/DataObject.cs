@@ -42,6 +42,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect spell");
                 Console.WriteLine(response.Content);
             }
         }
@@ -59,6 +60,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect category");
                 Console.WriteLine(response.Content);
             }
         }
@@ -76,6 +78,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect classes");
                 Console.WriteLine(response.Content);
             }
         }
@@ -93,6 +96,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect classes / equipment");
                 Console.WriteLine(response.Content);
             }
         }
@@ -110,6 +114,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect equipment");
                 Console.WriteLine(response.Content);
             }
         }
@@ -127,6 +132,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect monster");
                 Console.WriteLine(response.Content);
             }
         }
@@ -144,6 +150,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect card");
                 Console.WriteLine(response.Content);
             }
         }
@@ -162,6 +169,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect deck and collection");
                 Console.WriteLine(response.Content);
             }
 
@@ -177,6 +185,7 @@ namespace TowersWebsocketNet31.Server.Game
             }
             else
             {
+                Console.WriteLine("Error at Collect collection");
                 Console.WriteLine(response.Content);
             }
         }
