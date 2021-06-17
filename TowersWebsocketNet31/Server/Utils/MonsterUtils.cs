@@ -33,7 +33,7 @@ namespace TowersWebsocketNet31.Server
         public string typeWeapon { get; set; } = "0";
         public int monsterType { get; set; } = 0;
 
-        public List<SpellJsonObject> skillListId;
+        public List<SpellJsonObject> skillListId { get; set; }
 
         public string onDamageDealt { get; set; }
         public string onDamageReceive { get; set; }

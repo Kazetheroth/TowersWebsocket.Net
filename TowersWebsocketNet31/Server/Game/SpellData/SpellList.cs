@@ -54,14 +54,15 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
                 Console.WriteLine("After deserialization spell list");
                 Console.WriteLine(spellList);
 
-                if (spellList != null)
+                if (spellList != null && spellList.skills != null)
                 {
-                    Console.WriteLine(spellList.skills);
+                    Console.WriteLine("skills ici ?");
                     Console.WriteLine(spellList.skills.Count);
                 }
                 else
                 {
-                    Console.WriteLine("Liste null - ahah");
+                    Console.WriteLine("Liste null - ahah " + spellList);
+                    Console.WriteLine("Liste skill null - ahah " + spellList.skills);
                     return;
                 }
 

@@ -3,12 +3,12 @@
 {
     public class SpellListObject
     {
-        public List<SpellJsonObject> skills;
+        public List<SpellJsonObject> skills { get; set; }
     }
 
     public class SpellJsonObject
     {
-        public string id;
-        public string name;
+        public string id { get; set; }
+        public string name { get; set; }
     }
 }
