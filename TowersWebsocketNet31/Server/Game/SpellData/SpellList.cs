@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using TowersWebsocketNet31.Server.Game.Mechanics;
 
 namespace TowersWebsocketNet31.Server.Game.SpellData
@@ -106,7 +107,11 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
             try
             {
                 jsonSpell = File.ReadAllText(tempPath);
-                spell = JsonSerializer.Deserialize<Spell>(jsonSpell);
+                
+                JsonSerializerOptions options = new JsonSerializerOptions();
+                options.Converters.Add(new JsonStringEnumConverter());
+
+                spell = JsonSerializer.Deserialize<Spell>(jsonSpell, options);
                 spell = Utils.Clone(spell);
             }
             catch (Exception e)
