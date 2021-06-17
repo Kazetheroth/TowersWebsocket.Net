@@ -143,14 +143,16 @@ namespace TowersWebsocketNet31.Server.Game.Controller
         public static bool PlaySpellActions(SpellComponent spellComponent, Trigger trigger)
         {
             bool findAction = false;
-            
-            if (!spellComponent.actions.ContainsKey(trigger))
-            {
-                return findAction;
-            }
 
-            List<ActionTriggered> actionsToPlay = spellComponent.actions[trigger];
-            
+            // TODO : need to find solution to deserialize
+//            if (!spellComponent.actions.ContainsKey(trigger))
+//            {
+//                return findAction;
+//            }
+//
+//            List<ActionTriggered> actionsToPlay = spellComponent.actions[trigger];
+            List<ActionTriggered> actionsToPlay = new List<ActionTriggered>();
+
             foreach (ActionTriggered action in actionsToPlay)
             {   
                 TargetsFound targetsFound =

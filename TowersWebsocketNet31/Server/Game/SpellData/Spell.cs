@@ -163,7 +163,8 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         public DamageType damageType { get; set; }
 
         /* New var */
-        public Dictionary<Trigger, List<ActionTriggered>> actions { get; set; } = new Dictionary<Trigger, List<ActionTriggered>>();
+        // TODO : need to find solution to deserialize
+//        public Dictionary<Trigger, List<ActionTriggered>> actions { get; set; } = new Dictionary<Trigger, List<ActionTriggered>>();
         public float spellDuration { get; set; }
         public float spellInterval { get; set; }
 
