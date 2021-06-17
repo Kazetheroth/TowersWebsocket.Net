@@ -203,6 +203,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         }
     }
 
+    [Serializable]
     public enum SpellTag
     {
         MeleeDamage,
