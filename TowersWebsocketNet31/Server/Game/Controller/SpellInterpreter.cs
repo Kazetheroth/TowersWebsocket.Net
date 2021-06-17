@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.Mechanics;
+using TowersWebsocketNet31.Server.Game.SpellData;
 
 namespace TowersWebsocketNet31.Server.Game.Controller
 {
@@ -183,11 +184,12 @@ namespace TowersWebsocketNet31.Server.Game.Controller
                 {
                     int damageDeal = action.damageDeal;
 
-                    if (spellComponent.damageMultiplierOnDistance != 0)
-                    {
-                        damageDeal += (int)(Vector3.Distance(spellComponent.startAtPosition, spellComponent.position) *
-                                      spellComponent.damageMultiplierOnDistance);
-                    }
+                    // TODO : need travel distance
+//                    if (spellComponent.damageMultiplierOnDistance != 0)
+//                    {
+//                        damageDeal += (int)(spellComponent.spellPrefabController.distanceTravelled *
+//                                            spellComponent.damageMultiplierOnDistance);
+//                    }
                     
                     if (targetsFound.targets.Count > 0)
                     {
@@ -226,14 +228,12 @@ namespace TowersWebsocketNet31.Server.Game.Controller
             float spellInterval = spellComponent.spellInterval <= 0.00001 ? 1 : spellComponent.spellInterval;
             int originalSpellCharges = spellComponent.spellCharges;
             
-            while (spellDuration > 0 || (originalSpellCharges != 0 && spellComponent.spellCharges > 0) 
-                                     || (spellComponent.trajectory != null && spellComponent.trajectory.disapearAtTheEndOfTrajectory)
-                                     )
+            while (
+                spellDuration > 0 || 
+                (originalSpellCharges != 0 && spellComponent.spellCharges > 0) || 
+                (spellComponent.trajectory != null && spellComponent.trajectory.disapearAtTheEndOfTrajectory) ||
+                (spellComponent.originSpell != null && spellComponent.originSpell.isHolding))
             {
-                if (spellComponent.stopSpellComponent)
-                {
-                    break;
-                }
                 DuringIntervalSpellBehavior(spellComponent);
 
                 await Task.Delay((int)(spellInterval * 1000));
@@ -245,19 +245,10 @@ namespace TowersWebsocketNet31.Server.Game.Controller
 
         public static void EndSpellComponent(SpellComponent spellComponent)
         {
-            // Si l'arrêt n'a pas déjà été appelé, on appelle la fin du spell
-            if (!spellComponent.stopSpellComponent)
-            {
-                AtTheEndSpellBehavior(spellComponent);
-            }
-
-            if (!spellComponent.stopSpellComponent)
-            {
-                spellComponent.stopSpellComponent = true;
-            }
+            AtTheEndSpellBehavior(spellComponent);
 
             spellComponent.caster.activeSpellComponents.Remove(spellComponent);
-
+            
             // TODO : côté client
 //            InstantiateSpell.DeactivateSpell(spellComponent);
         }

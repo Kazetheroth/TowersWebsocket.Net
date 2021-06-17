@@ -245,7 +245,6 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
                     if (entity.spells.Count > 0)
                     {
                         entity.spells[0].isOnCooldown = false;
-                        entity.spells[0].alreadyRecast = false;
                     }
 
                     break;
@@ -253,7 +252,6 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
                     if (entity.spells.Count > 1)
                     {
                         entity.spells[1].isOnCooldown = false;
-                        entity.spells[1].alreadyRecast = false;
                     }
 
                     break;
@@ -261,7 +259,6 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
                     if (entity.spells.Count > 2)
                     {
                         entity.spells[2].isOnCooldown = false;
-                        entity.spells[2].alreadyRecast = false;
                     }
 
                     break;

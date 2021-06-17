@@ -49,20 +49,10 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         {
             try
             {
-                Console.WriteLine("Before deserialization spell list");
                 SpellListObject spellList = JsonSerializer.Deserialize<SpellListObject>(json);
-                Console.WriteLine("After deserialization spell list");
-                Console.WriteLine(spellList);
 
-                if (spellList != null && spellList.skills != null)
+                if (spellList == null || spellList.skills == null)
                 {
-                    Console.WriteLine("skills ici ?");
-                    Console.WriteLine(spellList.skills.Count);
-                }
-                else
-                {
-                    Console.WriteLine("Liste null - ahah " + spellList);
-                    Console.WriteLine("Liste skill null - ahah " + spellList.skills);
                     return;
                 }
 
@@ -131,18 +121,9 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         private void DownloadSpell(string filename)
         {
             using var client = new WebClient();
-            
-            Console.WriteLine("data : " + Directory.Exists("/app/server/TowersWebsocketNet31/Data/"));
-            Console.WriteLine("spell : " + Directory.Exists("/app/server/TowersWebsocketNet31/Data/SpellsJson/"));
-
-            string [] fileEntries = Directory.GetFiles("/app/server/TowersWebsocketNet31/Data/SpellsJson/");
-            Console.WriteLine("count before : " + fileEntries.Length);
 
             client.DownloadFile(new Uri($@"https://www.towers.heolia.eu/data/spell/{filename}.json"), 
                 "/app/server/TowersWebsocketNet31/Data/SpellsJson/" + filename + ".json");
-            
-            string [] fileEntries2 = Directory.GetFiles("/app/server/TowersWebsocketNet31/Data/SpellsJson/");
-            Console.WriteLine("count before : " + fileEntries2.Length);
         }
     }
 }

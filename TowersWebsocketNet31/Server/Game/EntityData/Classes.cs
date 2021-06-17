@@ -1,6 +1,6 @@
-﻿﻿using TowersWebsocketNet31.Server.Game.Mechanics;
+﻿using TowersWebsocketNet31.Server.Game.SpellData;
 
- namespace TowersWebsocketNet31.Server.Game.EntityData
+namespace TowersWebsocketNet31.Server.Game.EntityData
 {   
     public class Classes
     {

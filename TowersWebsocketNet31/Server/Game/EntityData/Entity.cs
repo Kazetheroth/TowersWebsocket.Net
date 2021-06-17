@@ -5,6 +5,7 @@ using Games.Global.Armors;
 using TowersWebsocketNet31.Server.Game.Controller;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
 using TowersWebsocketNet31.Server.Game.Mechanics;
+using TowersWebsocketNet31.Server.Game.SpellData;
 
 namespace TowersWebsocketNet31.Server.Game.EntityData
 {

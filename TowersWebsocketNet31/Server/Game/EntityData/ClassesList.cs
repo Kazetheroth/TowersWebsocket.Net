@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
 using TowersWebsocketNet31.Server.Game.Mechanics;
+using TowersWebsocketNet31.Server.Game.SpellData;
 using Utils;
 
 namespace TowersWebsocketNet31.Server.Game.EntityData
