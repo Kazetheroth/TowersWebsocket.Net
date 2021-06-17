@@ -86,7 +86,7 @@ namespace TowersWebsocketNet31.Server.Game
         private static async Task CollectClassesEquipment()
         {
             RestClient api = new RestClient("https://www.towers.heolia.eu");
-            RestRequest request = new RestRequest("services/game/classesCategory/list.php");
+            RestRequest request = new RestRequest("services/game/classes_category/list.php");
             var response = api.Post(request);
             var content = response.Content;
 
