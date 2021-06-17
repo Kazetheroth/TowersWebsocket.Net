@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -24,9 +25,13 @@ namespace TowersWebsocketNet31.Server
         {
             base.OnMessage(e);
             Console.WriteLine($"Received Message : {e.Data}");
-            if (JsonSerializer.Deserialize<Message>(e.Data) != null)
+
+            JsonSerializerOptions options = new JsonSerializerOptions();
+            options.Converters.Add(new JsonStringEnumConverter());
+
+            var newMessage = JsonSerializer.Deserialize<Message>(e.Data, options);
+            if (newMessage != null)
             {
-                var newMessage = JsonSerializer.Deserialize<Message>(e.Data);
                 LoggerUtils.WriteToLogFile(newMessage._ROOMID, e.Data);
 //                if (newMessage.GRID != null)
 //                {
