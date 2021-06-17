@@ -1,0 +1,7 @@
+###################### GENERAL ######################
+{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"Dabm1X6cnLnjGllVAiRi", "room":"GENERAL"}]}
+{"callbackMessages":{"message":"Identity", "identity":{"classes":-1, "weapon":-1}}}
+{"callbackMessages":{"message":"Identity Set"}}
+{"_TARGET":"SELF","_ROOMID":"GENERAL","_CLASS":"null","_METHOD":"setIdentity","_ARGS":[{"tokenPlayer":"vupHAfwA2mm65TFGBrbO", "room":"GENERAL"}]}
+{"callbackMessages":{"message":"Identity", "identity":{"classes":-1, "weapon":-1}}}
+{"callbackMessages":{"message":"Identity Set"}}

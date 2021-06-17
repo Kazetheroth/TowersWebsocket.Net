@@ -25,6 +25,8 @@ namespace TowersWebsocketNet31
         {
             //await TestMain.RunTestAsyncOneEffect();
 
+            
+            Console.WriteLine(">>>>>>>>>>>>>>>>>>> CHECH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
             await DataObject.InitDictionary();
 
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -72,7 +74,9 @@ namespace TowersWebsocketNet31
             webSocketServer.Start();
             
             rooms.Add(new Room(0, "GENERAL", null, 0, 500, "public", false, true, true, true, new List<Account>(), null));
+            rooms[0].CreateRoomLog();
             rooms.Add(new Room(1, "MatchmakingWaitinglist", null, 0, 500, "public", false, true, true, true, new List<Account>(), null));
+            rooms[1].CreateRoomLog();
 
             Console.WriteLine("Websocket Server started!");
             Console.ReadKey(true);

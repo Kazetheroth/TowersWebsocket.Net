@@ -97,7 +97,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
                 spell.isOnCooldown = false;
             }
 
-            underEffects.Clear();
+            ClearUnderEffect();
             damageDealExtraEffect.Clear();
             damageReceiveExtraEffect.Clear();
             activeSpellComponents.Clear();
@@ -175,8 +175,8 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
 
         public void InitWeapon(int idWeapon)
         {
-            Weapon weapon = new Weapon();
-            weapon.InitPlayerSkill(mainClass);
+            Weapon weapon = DataObject.EquipmentList.GetWeaponWithId(idWeapon);
+//            weapon.InitPlayerSkill(mainClass);
             // TODO : Add init weapon => change basic attack spell
 
             weapons.Add(weapon);

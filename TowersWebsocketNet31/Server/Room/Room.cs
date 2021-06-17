@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Timers;
-using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.Mechanics;
 using WebSocketSharp.Server;
 
@@ -24,7 +24,7 @@ namespace TowersWebsocketNet31.Server.Room
         private int timerValue;
         private Timer timer = new Timer(1000);
 
-        private Grid grid;
+        private GameGrid gameGrid;
         private List<Game.GameInstance> gameInstance;
 
         public Room(int id, string name, string password, int roomOwner, int maxPlayers, string mode, bool isRanking, bool isPublic, bool isLaunched, bool hasEnded, List<Account.Account> playerList, string stage)
@@ -109,14 +109,38 @@ namespace TowersWebsocketNet31.Server.Room
             set => playerList = value;
         }
 
-        public Grid Grid
+        public GameGrid GameGrid
         {
-            get => grid;
+            get => gameGrid;
         }
 
         public void GenerateGrid()
         {
-            grid = new Grid();
+            gameGrid = new GameGrid();
+        }
+
+        public void CreateRoomLog()
+        {
+            LoggerUtils.WriteToLogFile(name, $"###################### {name} ######################");
+        }
+
+        public void SendAttackGridToPlayer(TowersWebsocket session, string message)
+        {
+            int nbReady = 0;
+            
+            foreach (Account.Account player in PlayerList)
+            {
+                nbReady = player.WaitingForAttackGrid ? nbReady + 1 : nbReady;
+            }
+
+            if (nbReady == 2)
+            {
+                for (int i = 0; i < PlayerList.Count; ++i)
+                {
+                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + message + "\",\"maps\":" + JsonSerializer.Serialize(PlayerList[i].CurrentGameInstance.GameGrid) + "}}";
+                    session.SendToTarget(messageToSend, PlayerList[i].Id);
+                }
+            }
         }
 
         public void StartPhase(TowersWebsocket session, string stageString, string stageMessage, int timerValueInt)
@@ -148,15 +172,21 @@ namespace TowersWebsocketNet31.Server.Room
                 timer.Stop();
                 foreach (Account.Account player in PlayerList)
                 {
-                    if (stageString == "attackTimer")
+                    string messageToSend = "{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"";
+
+                    if (stageString == "defenseTimer")
                     {
-                        //gameInstance.SendGameData(session);
+                        messageToSend += ",\"maps\":" + JsonSerializer.Serialize(gameGrid);
                     }
-                    
-                    session.SendToTarget("{\"callbackMessages\":{\"message\":\"" + stageMessage + "\"}}", player.Id);
+
+                    messageToSend += "}}";
+
+                    session.SendToTarget(messageToSend, player.Id);
                 }
                 stage = stageString;
                 timerValue = timerValueInt;
+
+                timer = new Timer(1000);
                 timer.Elapsed += OnTimedEvent;
                 timer.Enabled = true;
             }
@@ -172,12 +202,13 @@ namespace TowersWebsocketNet31.Server.Room
             if (timerValue <= 0 && (stage == "roleTimer" || stage == "defenseTimer"))
             {
                 timer.Stop();
+                // TODO : send callback
                 return;
             }
             WebSocketServiceHost webSocketServiceHost;
             Program.webSocketServer.WebSocketServices.TryGetServiceHost("/websocket", out webSocketServiceHost);
             string callback = "{\"callbackMessages\":{\"" + stage + "\":" + timerValue + "}}";
-            Console.WriteLine(callback);
+
             foreach (Account.Account player in PlayerList)
             {
                 webSocketServiceHost.Sessions.SendTo(callback, player.Id);

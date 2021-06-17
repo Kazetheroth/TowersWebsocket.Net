@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading.Tasks;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
@@ -25,22 +27,22 @@ namespace TowersWebsocketNet31.Server
             if (JsonSerializer.Deserialize<Message>(e.Data) != null)
             {
                 var newMessage = JsonSerializer.Deserialize<Message>(e.Data);
-                
-                if (newMessage.GRID != null)
-                {
-                    var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
-                    if (playerList != null)
-                    {
-                        foreach (Account.Account player in playerList)
-                        {
-                            if (player.Id != ID)
-                            {
-                                SendToTarget("{\"GRID\":\"" + newMessage.GRID + "\"}", player.Id);
-                            }
-                        }
-                    }
-                    return;
-                }
+                LoggerUtils.WriteToLogFile(newMessage._ROOMID, e.Data);
+//                if (newMessage.GRID != null)
+//                {
+//                    var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+//                    if (playerList != null)
+//                    {
+//                        foreach (Account.Account player in playerList)
+//                        {
+//                            if (player.Id != ID)
+//                            {
+//                                SendToTarget("{\"GRID\":\"" + newMessage.GRID + "\"}", player.Id);
+//                            }
+//                        }
+//                    }
+//                    return;
+//                }
                 
                 Callbacks callback = OnMessageArgs(ref newMessage);
                 if (callback != null)
@@ -111,12 +113,14 @@ namespace TowersWebsocketNet31.Server
         private void SendToAll(Message newMessage, Callbacks callback)
         {
             List<Account.Account> playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
                 {
                     foreach (string returnCallbackMessage in callback.callbacks)
                     {
+                        LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                         SendToTarget(returnCallbackMessage, player.Id);
                     }
                 } 
@@ -125,8 +129,10 @@ namespace TowersWebsocketNet31.Server
 
         private void SendToSelf(Message newMessage, Callbacks callback)
         {
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             foreach (string returnCallbackMessage in callback.callbacks)
             {
+                LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                 SendToTarget(returnCallbackMessage, ID);
             }
         }
@@ -134,6 +140,7 @@ namespace TowersWebsocketNet31.Server
         private void SendToOthers(Message newMessage, Callbacks callback)
         {
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
@@ -142,6 +149,7 @@ namespace TowersWebsocketNet31.Server
                     {
                         foreach (string returnCallbackMessage in callback.callbacks)
                         {
+                            LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                             SendToTarget(returnCallbackMessage, player.Id);
                         }
                     }
@@ -152,6 +160,7 @@ namespace TowersWebsocketNet31.Server
         private void SendToTarget(Message newMessage, Callbacks callback)
         {
             var playerList = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.PlayerList;
+            string roomName = Program.rooms.Find(r => r.Name == newMessage._ROOMID)?.Name;
             if (playerList != null)
             {
                 foreach (Account.Account player in playerList)
@@ -160,6 +169,7 @@ namespace TowersWebsocketNet31.Server
                     {
                         foreach (string returnCallbackMessage in callback.callbacks)
                         {
+                            LoggerUtils.WriteToLogFile(roomName, returnCallbackMessage);
                             SendToTarget(returnCallbackMessage, player.Id);
                         }
                     }
@@ -201,6 +211,8 @@ namespace TowersWebsocketNet31.Server
                         break;
                     case "initGame":
                         Program.players.Find(x => x.Id == ID)?.InitGameInstance(newMessage._ARGS[0].classes, newMessage._ARGS[0].weapon, newMessage._ARGS[0].equipmentDeck, newMessage._ARGS[0].monsterDeck);
+                        Program.players.Find(x => x.Id == ID)?.SetDefenseReady();
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "defenseTimer", "StartDefense", 120);
                         break;
                     case "setDefenseReady":
                         Program.players.Find(x => x.Id == ID)?.SetDefenseReady();
@@ -210,7 +222,10 @@ namespace TowersWebsocketNet31.Server
                         Program.players.Find(x => x.Id == ID)?.SetAttackReady();
                         Program.rooms.Find(x => x.Name == message._ROOMID)?.StartPhase(this, "attackTimer", "StartAttack", 0);
                         break;
-                    default:
+                    case "waitingForAttackGrid":
+                        Program.players.Find(x => x.Id == ID)?.SetWaitingForAttackGrid();
+                        Program.players.Find(x => x.Id != ID)?.SetNewGrid(newMessage._ARGS[0].gameGrid);
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.SendAttackGridToPlayer(this, "LoadAttackGrid");
                         break;
                 }
             }

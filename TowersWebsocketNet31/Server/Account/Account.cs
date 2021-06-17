@@ -1,11 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Text.Json;
 using RestSharp;
-using RestSharp.Serialization.Json;
 using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
+using TowersWebsocketNet31.Server.Game.Mechanics;
 using TowersWebsocketNet31.Server.Game.Models;
 
 
@@ -20,6 +20,7 @@ namespace TowersWebsocketNet31.Server.Account
         private bool defenseEnd;
         private bool defenseReady;
         private bool attackReady;
+        private bool waitingForAttackGrid;
         private bool isBot;
 
         private GameInstance currentGameInstance;
@@ -78,6 +79,18 @@ namespace TowersWebsocketNet31.Server.Account
         {
             get => attackReady;
             set => attackReady = value;
+        }
+
+        public bool WaitingForAttackGrid
+        {
+            get => waitingForAttackGrid;
+            set => waitingForAttackGrid = value;
+        }
+
+        public GameInstance CurrentGameInstance
+        {
+            get => currentGameInstance;
+            set => currentGameInstance = value;
         }
 
         public bool IsBot
@@ -162,7 +175,7 @@ namespace TowersWebsocketNet31.Server.Account
                             players.Add(this);
                             players.Add(opponent);
                             Program.rooms.Add(new Room.Room(Program.rooms.Count, content, null, 0, 2, "1v1", true, true, true, false, players, null));
-                            string callback = "{\"callbackMessages\":{\"room\":\"" + content + "\", \"message\":\"MatchStart\", \"maps\":[" + Utils.GenerateStages() + "]}}";
+                            string callback = "{\"callbackMessages\":{\"room\":\"" + content + "\", \"message\":\"MatchStart\"}}";
                             session.SendToTarget(callback, id);
                             session.SendToTarget(callback, opponent.id);
                             return true;
@@ -172,7 +185,6 @@ namespace TowersWebsocketNet31.Server.Account
                             Console.WriteLine(e);
                             throw;
                         }
-                        
                     }
                 }
             }
@@ -182,19 +194,29 @@ namespace TowersWebsocketNet31.Server.Account
         public void SetGameLoaded()
         {
             gameLoaded = true;
+            waitingForAttackGrid = false;
             defenseReady = false;
             attackReady = false;
         }
 
         public void SetDefenseReady()
         {
+            waitingForAttackGrid = false;
             defenseReady = true;
             attackReady = false;
         }
         public void SetAttackReady()
         {
+            waitingForAttackGrid = false;
             defenseReady = false;
             attackReady = true;
+        }
+        
+        public void SetWaitingForAttackGrid()
+        {
+            waitingForAttackGrid = true;
+            defenseReady = false;
+            attackReady = false;
         }
 
         public void InitGameInstance(string classes, string weapon, string equipmentDeck, string monsterDeck)
@@ -205,7 +227,13 @@ namespace TowersWebsocketNet31.Server.Account
             int idMonsterDeck = Int32.Parse(monsterDeck);
             int idPlayer = 1;
 
-            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.Grid);
+            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.GameGrid);
+        }
+
+        public void SetNewGrid(GameGrid gameGrid)
+        {
+            // Check grid ?
+            currentGameInstance.GameGrid = gameGrid;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace TowersWebsocketNet31.Server.Test
             Console.WriteLine("Current origin att : " + origin.att);
 
             await Task.Delay(2000);
-            EffectController.StopCurrentEffect(origin, origin.underEffects[TypeEffect.AttackUp]);
+            EffectController.StopCurrentEffect(origin, origin.TryGetEffectInUnderEffect(TypeEffect.AttackUp));
             
             await effectTask;
             await effectTask2;

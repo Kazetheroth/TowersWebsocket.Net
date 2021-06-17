@@ -21,7 +21,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
 
     public class MonstersInGroup
     {
-        private Monster monster { get; set; }
+        public Monster monster { get; set; }
         public int nbMonster { get; set; }
 
         public void SetMonster(Monster nMonster)
