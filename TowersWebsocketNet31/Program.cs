@@ -26,7 +26,7 @@ namespace TowersWebsocketNet31
             //await TestMain.RunTestAsyncOneEffect();
 
             
-            Console.WriteLine(">>>>>>>>>>>>>>>>>>> CHECH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            Console.WriteLine(">>>>>>>>>>>>>>>>>>> Proof or fake <<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
             await DataObject.InitDictionary();
 
             bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
