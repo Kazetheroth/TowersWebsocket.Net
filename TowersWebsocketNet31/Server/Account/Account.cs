@@ -221,13 +221,13 @@ namespace TowersWebsocketNet31.Server.Account
 
         public void InitGameInstance(string classes, string weapon, string equipmentDeck, string monsterDeck)
         {
-            Classes wantedClass = Enum.Parse<Classes>(classes);
-            CategoryWeapon typeWeapon = Enum.Parse<CategoryWeapon>(weapon);
+            int idClass = Int32.Parse(classes);
+            int idCategoryWeapon = Int32.Parse(weapon);
             int idEquipmentDeck = Int32.Parse(equipmentDeck);
             int idMonsterDeck = Int32.Parse(monsterDeck);
             int idPlayer = 1;
 
-            currentGameInstance = new GameInstance(idPlayer, wantedClass, typeWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.GameGrid);
+            currentGameInstance = new GameInstance(idPlayer, idClass, idCategoryWeapon, idEquipmentDeck, idMonsterDeck, Program.rooms.Find(x => x.Name == roomId)?.GameGrid);
         }
 
         public void SetNewGrid(GameGrid gameGrid)

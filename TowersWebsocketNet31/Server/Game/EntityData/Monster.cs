@@ -7,10 +7,12 @@ using TowersWebsocketNet31.Server.Game.Mechanics;
 
 namespace TowersWebsocketNet31.Server.Game.EntityData
 {
-    public class SpellList
+    public enum MonsterType
     {
-        public string id;
-        public string name;
+        Tank,
+        Support,
+        Distance,
+        Cac
     }
     
     public class Monster: Entity
@@ -24,7 +26,12 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
 
         public TypeWeapon constraint { get; set; }
 
-        public List<SpellList> spellsName { get; set; }
+        public MonsterType monsterType { get; set; }
+
+        public void SetConstraint(TypeWeapon nconstraint)
+        {
+            constraint = nconstraint;
+        }
 
         public void InitMonster()
         {
@@ -39,29 +46,6 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
             AttackBehaviorType = AttackBehaviorType.Random;
         }
 
-        public bool InitWeapon(int idWeapon)
-        {
-            if (weapons.Count < nbWeapon)
-            {
-                // TODO : load weapon
-//                Weapon weapon = DataObject.EquipmentList.GetWeaponWithId(idWeapon);
-                Weapon weapon = new Weapon();
-
-                if (constraint != weapon.type)
-                {
-                    return false;
-                }
-
-                weapons.Add(weapon);
-
-                return true;
-            }
-
-            SpellController.CastPassiveSpell(this);
-
-            return false;
-        }
-
         public void InitOriginalWeapon()
         {
             if (nbWeapon == 0)
@@ -70,23 +54,9 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
             }
 
             // TODO : get weapon
-//            Weapon weapon = DataObject.EquipmentList.GetWeaponWithId(weaponOriginalId);
-            Weapon weapon = new Weapon();
+            Weapon weapon = DataObject.EquipmentList.GetWeaponWithId(weaponOriginalId);
 
-            weapons.Add(weapon);
-        }
-
-        public void InitSpells()
-        {
-            foreach (SpellList spellName in spellsName)
-            {
-                Spell spell = SpellController.LoadSpellByName(spellName.name);
-
-                if (spell != null)
-                {
-                    spells.Add(spell);
-                }
-            }
+            this.weapon = weapon;
         }
     }
 }

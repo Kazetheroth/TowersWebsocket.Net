@@ -1,26 +1,102 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using RestSharp;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
 using TowersWebsocketNet31.Server.Game.Models;
+using TowersWebsocketNet31.Server.Game.SpellData;
 
 namespace TowersWebsocketNet31.Server.Game
 {
     public static class DataObject
     {   
+        public static ClassesList ClassesList;
+        public static SpellList SpellList;
+        public static CategoryWeaponList CategoryWeaponList;
         public static MonsterList MonsterList;
         public static EquipmentList EquipmentList;
         public static CardList CardList;
 
         public static async Task InitDictionary()
         {
+            await CollectSpell();
+            await CollectCategoryWeapon();
+            await CollectClasses();
             await CollectEquipment();
+            await CollectClassesEquipment();
             await CollectMonster();
             await CollectCard();
         }
 
+
+        private static async Task CollectSpell()
+        {
+            RestClient api = new RestClient("https://www.towers.heolia.eu");
+            RestRequest request = new RestRequest("services/game/skill/list.php");
+            var response = api.Post(request);
+            var content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                SpellList = new SpellList(content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+        }
+
+        private static async Task CollectCategoryWeapon()
+        {
+            RestClient api = new RestClient("https://www.towers.heolia.eu");
+            RestRequest request = new RestRequest("services/game/category/list.php");
+            var response = api.Post(request);
+            var content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                CategoryWeaponList = new CategoryWeaponList(content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+        }
+
+        private static async Task CollectClasses()
+        {
+            RestClient api = new RestClient("https://www.towers.heolia.eu");
+            RestRequest request = new RestRequest("services/game/classes/list.php");
+            var response = api.Post(request);
+            var content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                ClassesList = new ClassesList(content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+        }
+
+        private static async Task CollectClassesEquipment()
+        {
+            RestClient api = new RestClient("https://www.towers.heolia.eu");
+            RestRequest request = new RestRequest("services/game/classesCategory/list.php");
+            var response = api.Post(request);
+            var content = response.Content;
+
+            if (response.IsSuccessful)
+            {
+                ClassesList.InitClassesCategorySpells(content);
+            }
+            else
+            {
+                Console.WriteLine(response.Content);
+            }
+        }
+        
         private static async Task CollectEquipment()
         {
             RestClient api = new RestClient("https://www.towers.heolia.eu");

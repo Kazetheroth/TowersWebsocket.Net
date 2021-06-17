@@ -20,7 +20,7 @@ namespace TowersWebsocketNet31.Server.Game.Controller
 
             Task currentTask;
 
-            if ((!spell.isOnCooldown && spell.nbUse != 0) || (spell.activeSpellComponent != null && entity.weapons.Count > 0))
+            if ((!spell.isOnCooldown && spell.nbUse != 0) || (spell.activeSpellComponent != null))
             {
                 if (spell.nbUse > 0)
                 {

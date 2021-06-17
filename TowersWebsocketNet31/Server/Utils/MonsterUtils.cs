@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using TowersWebsocketNet31.Server.Game;
 using TowersWebsocketNet31.Server.Game.EntityData;
 using TowersWebsocketNet31.Server.Game.EquipmentData;
+using TowersWebsocketNet31.Server.Game.Mechanics;
+using TowersWebsocketNet31.Server.Game.SpellData;
 
 namespace TowersWebsocketNet31.Server
 {
@@ -27,8 +31,9 @@ namespace TowersWebsocketNet31.Server
         public string weaponId { get; set; } = "0";
 
         public string typeWeapon { get; set; } = "0";
+        public int monsterType { get; set; } = 0;
 
-        public List<SpellList> skillListId;
+        public List<SpellJsonObject> skillListId;
 
         public string onDamageDealt { get; set; }
         public string onDamageReceive { get; set; }
@@ -38,13 +43,12 @@ namespace TowersWebsocketNet31.Server
 
         public void PrintAttribute()
         {
-            Console.WriteLine("Object id : " + id + " name : " + name);
-            Console.WriteLine("Stats => dmg : " + att + " speed : " + speed + " hp : " + hp + " def : " + def +
-                              " nbWeapon : " + nbWeapon);
+            Console.WriteLine("Object id : " + id + " name : " + name + " type " + (MonsterType) monsterType);
+            Console.WriteLine("Stats => dmg : " + att + " speed : " + speed + " hp : " + hp + " def : " + def + " nbWeapon : " + nbWeapon);
             Console.WriteLine("Ability => onDamageDealt : " + onDamageDealt + " onDamageReceive : " + onDamageReceive);
             Console.WriteLine("Model Name : " + model);
             Console.WriteLine("skills : ");
-            foreach (SpellList skill in skillListId)
+            foreach (SpellJsonObject skill in skillListId)
             {
                 Console.WriteLine("Cast : " + skill.name);
             }
@@ -52,6 +56,18 @@ namespace TowersWebsocketNet31.Server
 
         public Monster ConvertToMonster()
         {
+            List<Spell> spells = new List<Spell>();
+            
+            skillListId.ForEach(spell =>
+            {
+                Spell foundSpell = DataObject.SpellList.GetSpellById(Int32.Parse(spell.id));
+
+                if (foundSpell != null)
+                {
+                    spells.Add(foundSpell);
+                }
+            });
+
             Monster monster = new Monster
             {
                 id = Int32.Parse(id),
@@ -70,9 +86,10 @@ namespace TowersWebsocketNet31.Server
                 speed = Int32.Parse(speed),
                 nbWeapon = Int32.Parse(nbWeapon),
                 weaponOriginalId = Int32.Parse(weaponId),
-                constraint = (TypeWeapon) Int32.Parse(typeWeapon),
-                spellsName = skillListId
+                spells = spells
             };
+
+            monster.SetConstraint((TypeWeapon) Int32.Parse(typeWeapon));
 
             return monster;
         }

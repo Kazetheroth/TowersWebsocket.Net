@@ -40,7 +40,6 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
         public Monster GetMonsterById(int id)
         {
             Monster cloneMonster = Utils.Clone(monsterList.First(monster => monster.id == id));
-            cloneMonster.InitSpells();
             cloneMonster.typeEntity = TypeEntity.MOB;
             return cloneMonster;
         }

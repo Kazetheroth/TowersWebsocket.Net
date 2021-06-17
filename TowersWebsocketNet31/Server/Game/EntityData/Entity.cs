@@ -67,7 +67,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
         public List<int> playerInBack { get; set; }
         
         // If needed, create WeaponExposer to get all scripts of a weapon
-        public List<Weapon> weapons { get; set; }
+        public Weapon weapon { get; set; }
         public List<Armor> armors { get; set; }
 
         public TypeEntity typeEntity { get; set; }
@@ -132,7 +132,6 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
 
         public Entity()
         {
-            weapons = new List<Weapon>();
             armors = new List<Armor>();
             underEffects = new List<Effect>();
             damageDealExtraEffect = new List<Effect>();

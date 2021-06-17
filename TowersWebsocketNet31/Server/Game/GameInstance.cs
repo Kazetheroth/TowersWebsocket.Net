@@ -23,11 +23,11 @@ namespace TowersWebsocketNet31.Server.Game
         
         public readonly string headerDataInit = "GameInstance";
 
-        public GameInstance(int idPlayer, Classes classes, CategoryWeapon categoryWeapon, int idEquipmentdeck, int idMonsterDeck, GameGrid gameGrid)
+        public GameInstance(int idPlayer, int idClasses, int idCategoryWeapon, int idEquipmentdeck, int idMonsterDeck, GameGrid gameGrid)
         {
             this.idPlayer = idPlayer;
             this.GameGrid = gameGrid;
-            player = new Player(classes, categoryWeapon);
+            player = new Player(idClasses, idCategoryWeapon);
         }
 
         public void SendGameData(TowersWebsocket session)

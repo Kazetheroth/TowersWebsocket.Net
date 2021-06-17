@@ -10,26 +10,6 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
         Distance,
         Cac
     }
-    
-    public enum CategoryWeapon
-    {
-        SHORT_SWORD,
-        LONG_SWORD,
-        SPEAR,
-        AXE,
-        TWO_HAND_AXE,
-        HAMMER,
-        HALBERD,
-        MACE,
-        BOW,
-        STAFF,
-        DAGGER,
-        TRIDENT,
-        RIFLE,
-        CROSSBOW,
-        SLING,
-        HANDGUN
-    }
 
     public class Weapon : Equipment
     {
@@ -53,21 +33,7 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
 
         public void InitPlayerSkill(Classes classe)
         {
-//            switch (classe)
-//            {
-//                case Classes.Warrior:
-//                    InitWeaponSpellWithJson(warriorSpells);
-//                    break;
-//                case Classes.Mage:
-//                    InitWeaponSpellWithJson(mageSpells);
-//                    break;
-//                case Classes.Rogue:
-//                    InitWeaponSpellWithJson(rogueSpells);
-//                    break;
-//                case Classes.Ranger:
-//                    InitWeaponSpellWithJson(rangerSpells);
-//                    break;
-//            }
+
         }
 
         public void InitWeapon()

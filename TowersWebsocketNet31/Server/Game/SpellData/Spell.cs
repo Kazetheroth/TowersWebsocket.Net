@@ -176,6 +176,7 @@ namespace TowersWebsocketNet31.Server.Game.Mechanics
     [Serializable]
     public class Spell
     {
+        public int id { get; set; }
         public StartFrom startFrom { get; set; }
         public string nameSpell { get; set; }
         public float initialCooldown { get; set; }

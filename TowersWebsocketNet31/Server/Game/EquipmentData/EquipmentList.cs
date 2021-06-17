@@ -17,6 +17,11 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
             armors = new List<Armor>();
             InitEquipmentDictionnary(jsonObject);
         }
+        
+        public Weapon GetFirstWeaponFromIdCategory(int idCategory)
+        {
+            return Utils.Clone(weapons.Find(weapon => weapon.category.id == idCategory));
+        }
 
         public Weapon GetWeaponWithName(string findName)
         {
