@@ -21,6 +21,6 @@ namespace TowersWebsocketNet31.Server.Game.EquipmentData
 
     public class CategoryWeaponListJsonObject
     {
-        public List<CategoryWeaponJsonObject> categories;
+        public List<CategoryWeaponJsonObject> categories { get; set; }
     }
 }

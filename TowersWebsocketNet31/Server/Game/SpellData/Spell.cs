@@ -8,6 +8,7 @@ using TowersWebsocketNet31.Server.Game.SpellData.SpellParam;
 namespace TowersWebsocketNet31.Server.Game.SpellData
 {
     // StartFrom is used by spell and by ActionTriggered
+    [Serializable]
     public enum StartFrom
     {
         Caster,
@@ -21,6 +22,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         ClosestEnemyFromCaster
     }
 
+    [Serializable]
     public enum Geometry
     {
         Square,
@@ -28,6 +30,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         Cone,
     }
 
+    [Serializable]
     public enum TypeSpellComponent
     {
         Classic,
@@ -38,13 +41,15 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         BasicAttack
     }
 
+    [Serializable]
     public enum DamageType
     {
         Magical,
         Physical
      
     }
-    
+
+    [Serializable]
     public enum Trigger
     {
         START,
@@ -56,7 +61,8 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         ON_DAMAGE_RECEIVED,
         ON_ENTITY_DIE
     }
-    
+
+    [Serializable]
     public enum ConditionType
     {
         IfTargetHasEffect,
@@ -64,6 +70,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         MinEnemiesInArea
     }
 
+    [Serializable]
     public class TargetsFound
     {
         public List<Entity> targets = new List<Entity>();
@@ -104,12 +111,14 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         }
     }
 
+    [Serializable]
     public enum ActionOnEffectType
     {
         ADD,
         DELETE
     }
 
+    [Serializable]
     public enum ConditionReduceCharge
     {
         None,
@@ -117,6 +126,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
         OnDamageReceived
     }
 
+    [Serializable]
     public enum TypeSpell
     {
         UniqueActivation,
@@ -244,7 +254,7 @@ namespace TowersWebsocketNet31.Server.Game.SpellData
 
         // Multiple Activation
         public List<SpellComponentWithTimeCast> spellComponents { get; set; }
-        public int nbSpellActivation = 0;
+        public int nbSpellActivation { get; set; } = 0;
         
         // In game parameters
         public float currentCooldown;
