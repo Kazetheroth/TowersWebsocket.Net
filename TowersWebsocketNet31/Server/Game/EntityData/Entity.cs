@@ -244,7 +244,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
             }
             */
 
-            if (originDamage.hasLifeSteal)
+            if (originDamage.underEffects.Exists(effect => effect.typeEffect == TypeEffect.LifeSteal))
             {
                 originDamage.hp += damageReceived * originDamage.TryGetEffectInUnderEffect(TypeEffect.LifeSteal).level;
                 if (originDamage.hp > originDamage.initialHp)
