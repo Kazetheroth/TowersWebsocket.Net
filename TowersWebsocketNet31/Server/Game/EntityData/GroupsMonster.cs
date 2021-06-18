@@ -56,6 +56,7 @@ namespace TowersWebsocketNet31.Server.Game.EntityData
         public int cost { get; set; }
         public string name { get; set; }
         public int radius { get; set; } = DEFAULT_RADIUS;
+        public bool hasKey { get; set; }
 
         public List<MonstersInGroup> monstersInGroupList { get; set; } = new List<MonstersInGroup>();
     }
