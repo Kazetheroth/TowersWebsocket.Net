@@ -84,12 +84,12 @@ namespace TowersWebsocketNet31.Server.Game.Models
                     return;
                 }
 
-                List<Deck> decks = new List<Deck>();
-
                 Dictionary<int, int> cardsInCollection = new Dictionary<int, int>();
                 
+                Console.WriteLine(account.Id + " want to init collection");
                 foreach (CardInCollection cardInCollection in collectionList.collections)
                 {
+                    Console.WriteLine("Add " + Int32.Parse(cardInCollection.cardId) + " number " + Int32.Parse(cardInCollection.numbers)) ;
                     cardsInCollection.Add(Int32.Parse(cardInCollection.cardId), Int32.Parse(cardInCollection.numbers));
                 }
 
