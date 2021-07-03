@@ -164,6 +164,7 @@ namespace TowersWebsocketNet31.Server.Room
             }
             if (nbReady == 2)
             {
+                Console.WriteLine("CHANGING PHASE : " + stage);
                 if (stageString == "defenseTimer")
                 {
                     GenerateGrid();
@@ -209,6 +210,7 @@ namespace TowersWebsocketNet31.Server.Room
             Program.webSocketServer.WebSocketServices.TryGetServiceHost("/websocket", out webSocketServiceHost);
             string callback = "{\"callbackMessages\":{\"" + stage + "\":" + timerValue + "}}";
 
+            Console.WriteLine(callback);
             foreach (Account.Account player in PlayerList)
             {
                 webSocketServiceHost.Sessions.SendTo(callback, player.Id);

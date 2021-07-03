@@ -10,7 +10,6 @@ using WebSocketSharp.Server;
 
 namespace TowersWebsocketNet31.Server
 {
-    
     public class TowersWebsocket : WebSocketBehavior
     {
         protected override void OnOpen()
@@ -80,6 +79,11 @@ namespace TowersWebsocketNet31.Server
         protected override void OnClose(CloseEventArgs e)
         {
             base.OnClose(e);
+            Console.WriteLine(e.Code);
+            if (Sessions.PingTo(ID))
+            {
+                Sessions.CloseSession(ID);
+            }
             Account.Account account = Program.players.Find(p => p.Id == ID);
             Room.Room playerRoom = Program.rooms.Find(r => r.Name == account?.RoomId);
             if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
@@ -99,6 +103,11 @@ namespace TowersWebsocketNet31.Server
         protected override void OnError(ErrorEventArgs e)
         {
             base.OnError(e);
+            Console.WriteLine(e.Exception);
+            if (Sessions.PingTo(ID))
+            {
+                Sessions.CloseSession(ID);
+            }
             Account.Account account = Program.players.Find(p => p.Id == ID);
             Room.Room playerRoom = Program.rooms.Find(r => r.Name == account?.RoomId);
             if (playerRoom != null && playerRoom.Name != "GENERAL" && playerRoom.Name != "MatchmakingWaitinglist")
