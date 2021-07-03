@@ -215,7 +215,11 @@ namespace TowersWebsocketNet31.Server.Room
             {
                 webSocketServiceHost.Sessions.SendTo(callback, player.Id);
             }
-            
+        }
+
+        public void EndTimer()
+        {
+            timer.Stop();
         }
     }
 }

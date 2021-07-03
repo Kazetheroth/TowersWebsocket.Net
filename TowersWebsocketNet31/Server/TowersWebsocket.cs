@@ -242,9 +242,11 @@ namespace TowersWebsocketNet31.Server
                         Program.rooms.Find(x => x.Name == message._ROOMID)?.SendAttackGridToPlayer(this, "LoadAttackGrid");
                         break;
                     case "SendDeath":
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.EndTimer();
                         callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"DEATH\"}}");
                         break;
                     case "HasWon":
+                        Program.rooms.Find(x => x.Name == message._ROOMID)?.EndTimer();
                         callback.callbacks.Add("{\"callbackMessages\":{\"message\":\"WON\"}}");
                         break;
                 }
