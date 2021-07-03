@@ -9,7 +9,7 @@ namespace TowersWebsocketNet31.Server
         public static void WriteToLogFile(string fileName, string callback)
         {
             //Console.WriteLine(Directory.GetCurrentDirectory());
-            string path = "/app/server/TowersWebsocketNet31/Logs/" + fileName + ".twlog";
+            string path = Program.environnement != "LOCAL" ? "/app/server/TowersWebsocketNet31/Logs/" + fileName + ".twlog" : "../../../Logs/" + fileName + ".twlog";
             try
             {
                 using (StreamWriter sw = File.AppendText(path))

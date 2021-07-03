@@ -14,6 +14,7 @@ namespace TowersWebsocketNet31
 {
     public static class Program
     {
+        public static string environnement;
         private static string _endpoint;
         private static string _port;
         private static string _address;
@@ -46,6 +47,7 @@ namespace TowersWebsocketNet31
             
             _port = DotNetEnv.Env.GetString("PORT");
             Console.WriteLine("ENV : " + DotNetEnv.Env.GetString("ENV"));
+            environnement = DotNetEnv.Env.GetString("ENV");
             switch (DotNetEnv.Env.GetString("ENV"))
             {
                 case "PROD":

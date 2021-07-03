@@ -219,6 +219,7 @@ namespace TowersWebsocketNet31.Server.Room
 
         public void EndTimer()
         {
+            //Console.WriteLine("Arrêtes toi là !");
             timer.Stop();
         }
     }
